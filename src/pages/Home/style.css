@@ -1,0 +1,10 @@
+.home {
+    flex-direction: column;
+    overflow-y: scroll;
+}
+
+.home-corpo { 
+    padding: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}

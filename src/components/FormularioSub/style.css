@@ -1,0 +1,92 @@
+.form-cadastro {
+    flex: 3;
+    flex-direction: column;
+    padding: 20px;
+    align-content: flex-start;  
+    align-items: flex-start;  
+    border-right: 2px solid #323038;
+}
+.form-cadastro h2{
+    color: #000;   
+    width: 100%; 
+}
+.form-cadastro form {
+    margin-top: 20px;
+    width: 100%; 
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+
+}
+
+@media (max-width: 998px) {
+    .form-cadastro {
+        border-right: none;
+        border-bottom: 2px solid #323038;
+        flex: 1;
+    }
+    .form-cadastro form div {
+        flex-direction: column;
+    }
+}
+
+.form-cadastro form .form-campo {
+    flex-direction: column;
+    flex: 1;
+    align-items: flex-start;
+    justify-content: flex-start;
+    align-content: flex-start;
+    /* border: 1px solid red; */
+    margin: 5px 1px;
+
+}
+
+.form-label {
+    /* border: 1px solid red; */
+    width: 100%;
+    color: #000;
+    font-size: 15px;
+}
+
+.form-input {
+    border-radius: 2px;
+    border: 2px solid #45424e;
+    background: #f8f8f8;
+    padding: 15px;
+    margin-top: 5px;
+    height: 50px;
+    font-size: 17px;
+    min-width: 50px;
+    color: #000;
+    width: 100%;
+}
+
+.btn {
+    flex: 1;
+    margin: 2px;
+    border: none;
+    padding: 10px 20px;
+    color: #FFF;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 2px;
+}
+
+.btn-confirma {
+    background: #5a53be;
+}
+
+.btn-confirma:hover {
+    background: #6861cc;
+    cursor: pointer;
+}
+
+.btn-limpar {
+    background: #c04a42;
+}
+
+.btn-limpar:hover {
+    background: #be584b;
+    cursor: pointer;
+}

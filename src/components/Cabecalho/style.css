@@ -1,0 +1,47 @@
+.cabecalho {
+    background: #0000ff;
+    color: #FFF;
+    height: 80px;
+    justify-content: space-between;
+}
+
+.cabecalho div, .cabecalho a {
+    flex: 1;    
+    padding: 0px 30px;
+    align-items: center;
+}
+.cabecalho .logo {
+    display: flex;
+    text-decoration: none;
+    color: #FFF;
+    /* border: 1px solid red; */
+}
+
+.cabecalho .logo span {
+    font-size: 26px;
+    /* font-style: italic; */
+    font-weight: bold;   
+    flex: 2; 
+    margin-left: 15px;
+    text-shadow:  2px 2px #333;
+}
+
+.cabecalho .notificacoes {
+    flex: 6;
+    /* border: 1px solid red; */
+}
+.cabecalho .config-usuario {
+    justify-content: flex-end;
+    /* flex: 3; */
+}
+.link-cadastro {
+    text-decoration: none; 
+    color: #ffff00; 
+    font-size: 1.5em;
+    font-weight: 600;
+    transition: 0.2s;
+}
+.link-cadastro:hover {
+    color: #FFF;
+    font-size: 1.6em;
+}

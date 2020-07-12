@@ -1,0 +1,17 @@
+.list-links {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.list-links a {
+  text-decoration: none;
+  margin: 5px;
+  color: #ffff00;
+  font-size: 2em;
+  transition: 0.2s;
+}
+.list-links a:hover {
+  color: #fff;
+  font-size: 2.1em;
+}
