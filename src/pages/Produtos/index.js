@@ -31,7 +31,8 @@ function ItemLista({item}) {
                         {item.nome}
                     </div>
                     <div className="quantidade">
-                        {`${item.precoPorMetroQuadrado} m²`}
+                        <img src={item.imagem} alt=""/>
+                        {/* {`${item.precoPorMetroQuadrado} m²`} */}
                     </div>
                 </div>
                 <div className="item-lista-acoes">

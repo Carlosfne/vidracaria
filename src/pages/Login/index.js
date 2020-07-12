@@ -13,14 +13,11 @@ export default function Login() {
 
     async function handleLogin(e){
         e.preventDefault();
-  
-        console.log(nome)
-        console.log(senha)
-        history.push('home')
-        api.post('usuario/login',{
-            nome,
-            senha
-        })
+        // history.push('home')
+        var formData = new FormData()
+            formData.append('nome', nome)
+            formData.append('senha', senha)
+        api.post('usuario/login/',formData)
         .then(response => {
             console.log('RESPOSTA',response)
             history.push('/home')
