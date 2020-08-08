@@ -1,0 +1,31 @@
+.home-produtos {
+    flex-direction: column;
+    overflow-y: scroll;
+}
+
+.home-produtos-corpo { 
+    padding: 10px 20px;
+    flex-wrap: wrap;
+    /* justify-content: center; */
+    /* flex-direction: row; */
+}
+
+@media (max-width: 998px) {
+    .home-produtos-corpo {
+        flex-direction: column;
+    }
+    .home-produtos {
+        flex-direction: column;
+    }
+}
+
+.dialog-confirm{
+    width: 250px;
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+}
+.MuiPaper-root {
+    width: 350px;
+    height: 200px;
+}

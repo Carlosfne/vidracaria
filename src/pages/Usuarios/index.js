@@ -3,60 +3,132 @@ import api from '../../services/api';
 
 import { faTrash, faPencilAlt, faPlus, faBox } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Formulario from '../../components/Formulario';
-import Cabecalho from '../../components/Cabecalho';
-import Lista from '../../components/Lista';
 
-import imagemBackground from '../../images/backgroundDolar.png';
+import Cabecalho from '../../components/Cabecalho';
+
+
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
 
 import './style.css';
-
-function ItemLista({item}) {
-    
-    const [detalhes, setDetalhes] = useState(false);
-
-    return (
-        <div 
-            className="corpo-item-lista"
-            style={detalhes ? {maxHeight: "none"} : {maxHeight: "55px"}}
-        >
-            <div 
-                className="item-lista" 
-                // title="Clique para ver os detalhes"
-                // onClick={() => setDetalhes(!detalhes)}                
-            >
-                <div className="item-lista-id">{item.id}</div>
-                <div className="item-lista-dados-principais">
-                    <div className="nome">
-                        {item.nome}
-                    </div>
-                    <div className="quantidade">
-                        {`${item.dataCriacao}`}
-                    </div>
-                </div>
-                <div className="item-lista-acoes">
-                    {/* <button type="" title="Adicionar Estoque">
-                        <FontAwesomeIcon icon={faPlus} color="#a8ffe5" style={{marginRight: '2px'}}/>
-                        <FontAwesomeIcon icon={faBox} color="#a8ffe5"/>
-                    </button> */}
-                    <button type="" title="Excluir Usuário">
-                        <FontAwesomeIcon icon={faTrash} color="#fa9588"/>
-                    </button>
-                    <button type="" title="Editar Usuário">
-                        <FontAwesomeIcon icon={faPencilAlt} color="#DDD" />
-                    </button>
-                </div>
-            </div>
-
-        </div>
-    );
-}
 
 export default function Usuarios() {
 
     const [ produtos, setProdutos ] = useState([])
 
+    function ItemLista({item}) {
     
+        const [detalhes, setDetalhes] = useState(false);
+    
+        return (
+            <div 
+                className="corpo-item-lista"
+                style={detalhes ? {maxHeight: "none"} : {maxHeight: "55px"}}
+            >
+                <div 
+                    className="item-lista" 
+                    // title="Clique para ver os detalhes"
+                    // onClick={() => setDetalhes(!detalhes)}                
+                >
+                    <div className="item-lista-id">{item.id}</div>
+                    <div className="item-lista-dados-principais">
+                        <div className="nome">
+                            {item.nome}
+                        </div>
+                        <div className="quantidade">
+                            {`${item.dataCriacao}`}
+                        </div>
+                    </div>
+                    <div className="item-lista-acoes">
+                        {/* <button type="" title="Adicionar Estoque">
+                            <FontAwesomeIcon icon={faPlus} color="#a8ffe5" style={{marginRight: '2px'}}/>
+                            <FontAwesomeIcon icon={faBox} color="#a8ffe5"/>
+                        </button> */}
+                        <button type="" title="Excluir Usuário">
+                            {/* <FontAwesomeIcon icon={faTrash} color="#fa9588"/> */}
+                            <DialogMotorista value={item.id} />
+                        </button>
+                        {/* <button type="" title="Editar Usuário">
+                            <FontAwesomeIcon icon={faPencilAlt} color="#DDD" />
+                        </button> */}
+                    </div>
+                </div>
+    
+            </div>
+        );
+    }
+
+    function DialogMotorista(marca) {
+        const id = marca.value;
+        console.log(marca)
+        const [open, setOpen] = React.useState(false);
+        const [ marcain , setMarcaIn ] = React.useState([]);
+
+        const handleClickOpen = () => {
+          setOpen(true);
+          loadStep()
+      };
+        async function loadStep(){
+            var formData = new FormData()
+            formData.append('id', id)
+            const response = await api.post(`/usuario/detalhe/`, formData)
+            setMarcaIn(response.data.componentes)
+            console.log(response.data.componentes)
+        }
+
+        async function DeleteMarca(){
+            var formData = new FormData();
+            formData.append('id', id)
+            api.post(`/usuario/remover/`,formData)
+            .then( response=> {
+                console.log(response.data)
+                loadProdutos()
+                // toast.info(response.data[0])
+                // loadMotoristas()
+            })
+            .catch(error=> console.log(error))
+            setOpen(false);
+        }
+
+        const handleClose = () => {
+          setOpen(false);
+        };
+
+        return (
+          <div className='dialog'>
+            <button title="Excluir Produto" onClick={handleClickOpen}>
+                <FontAwesomeIcon icon={faTrash} color="#fa9588"/>
+            </button>
+            <Dialog
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+
+            >
+              <div className='dialog-confirm'>
+                  <DialogTitle id="alert-dialog-title"> <p>Excluir Usuário?</p></DialogTitle>
+                  <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                      <h3>{marcain.nome}</h3>
+                  </DialogContentText>
+                  </DialogContent>
+                  <div className='dialog-btns'>
+                  <button onClick={handleClose} className='btn-negative'>
+                      NÃO
+                  </button>
+                  <button onClick={DeleteMarca} className='btn-confirm' autoFocus>
+                      SIM
+                  </button>
+                  </div>
+              </div>
+            </Dialog>
+          </div>
+        );
+    }
 
     function Formulario() {
         const [ nome, setNome ] = useState('')

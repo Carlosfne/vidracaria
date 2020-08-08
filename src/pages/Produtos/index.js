@@ -11,25 +11,86 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Drawer from '@material-ui/core/Drawer';
+import Modal from '@material-ui/core/Modal';
 import imagemBackground from '../../images/backgroundDolar.png';
 
 import './style.css';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
     table: {
       width: 650,
     },
-  });
+    paper: {
+        position: 'absolute',
+        width: 400,
+        backgroundColor: theme.palette.background.paper,
+        border: '2px solid #000',
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(2, 4, 3),
+      },
+  }));
 
+  function rand() {
+    return Math.round(Math.random() * 20) - 10;
+  }
+  
+  function getModalStyle() {
+    const top = 50 + rand();
+    const left = 50 + rand();
+  
+    return {
+      top: `${top}%`,
+      left: `${left}%`,
+      transform: `translate(-${top}%, -${left}%)`,
+    };
+  }
 
 export default function Produtos() {
 
     const [ produtos, setProdutos ] = useState([])
 
+    function SimpleModal() {
+        const classes = useStyles();
+        // getModalStyle is not a pure function, we roll the style only on the first render
+        const [modalStyle] = React.useState(getModalStyle);
+        const [open, setOpen] = React.useState(false);
+      
+        const handleOpen = () => {
+          setOpen(true);
+        };
+      
+        const handleClose = () => {
+          setOpen(false);
+        };
+      
+        return (
+          <div>
+            <p>Click to get the full Modal experience!</p>
+            <button type="button" onClick={handleOpen}>
+              Open Modal
+            </button>
+            <Modal
+              aria-labelledby="simple-modal-title"
+              aria-describedby="simple-modal-description"
+              open={open}
+              onClose={handleClose}
+            >
+              <div style={modalStyle} className={classes.paper}>
+                <h2 id="simple-modal-title">Text in a modal</h2>
+                <p id="simple-modal-description">
+                  Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+                </p>
+                <SimpleModal />
+              </div>
+            </Modal>
+          </div>
+        );
+      }
+
     function TemporaryDrawer(marca) {
         const id = marca.value
         const classes = useStyles();
-        const [state, setState] = React.useState({
+        const [state, setState] = useState({
             top: false,
             left: false,
             bottom: false,
@@ -38,14 +99,33 @@ export default function Produtos() {
         const [ step, setStep ] = useState([]);
 
       async function loadStep(){
-          const response = await api.get(`/service/motorista/id?id=${id}`)
+          var formData = new FormData()
+          formData.append('id', id)
+          const response = await api.get(`/produto/detalhe/`, formData)
 
-          setStep(response.data)
+          setStep(response.data.produtos)
       }
           useEffect(() => {
             loadStep()
-          }, [])
-
+          },[])
+        
+          function valida_form (){
+            if(document.getElementById("nome").value.length <=0){
+            document.getElementById("nome").focus();
+            document.getElementById("nome").style.borderStyle = "solid";
+            document.getElementById("nome").style.borderWidth = "1px";
+            document.getElementById("nome").style.borderColor = "orange";
+            // return toast.error(`Campo Nome é obrigatório`)
+            }
+            if(document.getElementById("cnpj").value.length <=0){
+            document.getElementById("cnpj").focus();
+            document.getElementById("cnpj").style.borderStyle = "solid";
+            document.getElementById("cnpj").style.borderWidth = "1px";
+            document.getElementById("cnpj").style.borderColor = "orange";
+            // return toast.error(`Campo CNPJ é obrigatório`)
+            }
+        } 
+         
         async function UpdateTipo(data){
 
           var descricao = data.descricao
@@ -80,7 +160,64 @@ export default function Produtos() {
             }
 
           return (
-              <h1>Carlos</h1>
+              <div>
+                  <h1>Editar Produto</h1>
+                  <form onSubmit={handleSubmit} className='form-editar'>
+                        <label id='labeleditValue-usuario' htmlFor="">Produto</label>
+                        <input
+                        className='input-form-editar'
+                        maxLength='40'
+                        defaultValue={ step.nome }
+                        id='nome'
+                        autoFocus
+                        />
+                        <label id='labeleditValue-usuario' htmlFor="">Código</label>
+                        <input
+                        defaultValue={ step.codigo }
+                        id='codigo'
+                        className='input-form-editar'
+                        />
+                        {/* Informações de endereço */}
+                        <label id='labeleditValue-usuario' htmlFor="">Margem de Erro</label>
+                        <input
+                        id='margem'
+                        className='input-form-editar'
+                        maxLength='20'
+                        defaultValue={ step.margemDeErro }
+                        />
+                        {/* <label id='labeleditValue-usuario' htmlFor="">Bairro</label>
+                        <input
+                        id='email2'
+                        className='input-form-editar'
+                        maxLength='20'
+                        defaultValue={ dados.endereco }
+                        /> */}
+                        <label id='labeleditValue-usuario' htmlFor="">% de Perda</label>
+                        <input
+                        id='email2'
+                        className='input-form-editar'
+                        maxLength='20'
+                        defaultValue={ step.porcentagemDePerda }
+                        />
+                        <label id='labeleditValue-usuario' htmlFor="">Imagem</label>
+                        <input
+                        id='email2'
+                        className='input-form-editar'
+                        maxLength='20'
+                        defaultValue={ step.imagem }
+                        />
+                        <label id='labeleditValue-usuario' htmlFor="">Status</label>
+                        <input
+                        id='email2'
+                        className='input-form-editar'
+                        maxLength='20'
+                        defaultValue={ step.status }
+                        />
+                        {/* fim das informações de contato */}
+                        
+                        <button  className='general-button-salvar' onClick={valida_form} >Salvar</button>
+                      </form>
+              </div>
           )
       }
 
@@ -95,8 +232,8 @@ export default function Produtos() {
             <>
             <FormTipo
               className={classes.table}
-              onClick={toggleDrawer(side, false)}
-              onKeyDown={toggleDrawer(side, false)}
+            //   onClick={toggleDrawer(side, false)}
+            //   onKeyDown={toggleDrawer(side, false)}
               role="presentation"
               onSubmit={UpdateTipo} />
 
@@ -137,17 +274,18 @@ export default function Produtos() {
                             {item.nome}
                         </div>
                         <div className="quantidade">
-                            <img src={item.imagem} alt=""/>
+                            {/* <img src={item.imagem} alt=""/> */}
                             {/* {`${item.precoPorMetroQuadrado} m²`} */}
                         </div>
                     </div>
                     <div className="item-lista-acoes">
-                        <button type="" title="Adicionar Estoque">
+                        {/* <button type="" title="Adicionar Estoque">
                             <FontAwesomeIcon icon={faPlus} color="#a8ffe5" style={{marginRight: '2px'}}/>
                             <FontAwesomeIcon icon={faBox} color="#a8ffe5"/>
-                        </button>
-                        <DialogMotorista />
-                        <TemporaryDrawer />
+                        </button> */}
+                        <DialogMotorista value={item.id} />
+                        {/* <TemporaryDrawer /> */}
+                        {/* <SimpleModal value={item.id} /> */}
                     </div>
                 </div>
 
@@ -159,29 +297,30 @@ export default function Produtos() {
                             <span>{item.nome}</span>
                         </div>
                         <div className="campos">
-                            <strong>Categoria: </strong>
-                            <span>{item.categoria}</span>
+                            <strong>Código: </strong>
+                            <span>{item.codigo}</span>
                         </div>
                         <div className="campos">
-                            <strong>Unidade de Medida: </strong>
-                            <span>{item.unidadeMedida}</span>
+                            <strong>Margem de Erro: </strong>
+                            <span>{item.margemDeErro}</span>
                         </div>
                         <div className="campos">
-                            <strong>Estoque: </strong>
-                            <span>{item.estoque}</span>
+                            <strong>% de Perda: </strong>
+                            <span>{item.porcentagemDePerda}</span>
                         </div>
                         <div className="campos">
-                            <strong>Valor de Compra: </strong>
-                            <span>{item.valorCompra}</span>
+                            <strong>Imagem: </strong>
+                            {/* <span>{item.imagem}</span> */}
+                            <img src={item.imagem} alt={item.nome}/>
                         </div>
-                        <div className="campos">
+                        {/* <div className="campos">
                             <strong>Valor de Venda: </strong>
                             <span>{item.precoPorMetroQuadrado} m²</span>
                         </div>
                         <div className="campos">
                             <strong>Preço do Estoque: </strong>
                             <span>{item.valorCompra * item.estoque}</span>
-                        </div>
+                        </div> */}
                         <div className="campos">
                             {/* <strong>Preço do Estoque: </strong>
                             <span>{item.valorCompra * item.estoque}</span> */}
@@ -195,6 +334,7 @@ export default function Produtos() {
 
     function DialogMotorista(marca) {
         const id = marca.value;
+        console.log(marca)
         const [open, setOpen] = React.useState(false);
         const [ marcain , setMarcaIn ] = React.useState([]);
 
@@ -202,14 +342,21 @@ export default function Produtos() {
           setOpen(true);
           loadStep()
       };
-          async function loadStep(){
-              const response = await api.get(`/service/motorista/id?id=${id}`)
-              setMarcaIn(response.data[0])
-          }
+        async function loadStep(){
+            var formData = new FormData()
+            formData.append('id', id)
+            const response = await api.post(`/produto/detalhe/`, formData)
+            setMarcaIn(response.data.produtos)
+            console.log(response.data.produtos)
+        }
 
         async function DeleteMarca(){
-            api.delete(`/service/motorista/id?id=${id}`)
+            var formData = new FormData();
+            formData.append('id', id)
+            api.post(`/produto/remover/`,formData)
             .then( response=> {
+                console.log(response.data)
+                loadProdutos()
                 // toast.info(response.data[0])
                 // loadMotoristas()
             })
@@ -234,7 +381,7 @@ export default function Produtos() {
 
             >
               <div className='dialog-confirm'>
-                  <DialogTitle id="alert-dialog-title"> <p> Excluir Motorista? </p></DialogTitle>
+                  <DialogTitle id="alert-dialog-title"> <p> Excluir Produto? </p></DialogTitle>
                   <DialogContent>
                   <DialogContentText id="alert-dialog-description">
                       <h3>{marcain.nome}</h3>

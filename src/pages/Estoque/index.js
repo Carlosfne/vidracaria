@@ -3,27 +3,124 @@ import api from '../../services/api';
 
 import { faTrash, faPencilAlt, faPlus, faBox } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Formulario from '../../components/Formulario';
 import Cabecalho from '../../components/Cabecalho';
 
+import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Drawer from '@material-ui/core/Drawer';
+import imagemBackground from '../../images/backgroundDolar.png';
 
 import './style.css';
 
+const useStyles = makeStyles({
+    table: {
+      width: 650,
+    },
+  });
 
 
-export default function Componentes() {
+export default function Estoque() {
 
-    const [ produtos, setProdutos ] = useState([])
-    const [ estoques, setEstoques ] = useState([])
+    const [ estoque, setEstoque ] = useState([])
 
+    function TemporaryDrawer(marca) {
+        const id = marca.value
+        const classes = useStyles();
+        const [state, setState] = React.useState({
+            top: false,
+            left: false,
+            bottom: false,
+            right: false,
+        });
+        const [ step, setStep ] = useState([]);
+
+      async function loadStep(){
+          const response = await api.get(`/service/motorista/id?id=${id}`)
+
+          setStep(response.data)
+      }
+          useEffect(() => {
+            loadStep()
+          }, [])
+
+        async function UpdateTipo(data){
+
+          var descricao = data.descricao
+          var result = {
+              "id":id,
+              descricao,
+          }
+          console.log(result)
+          await api.put('/service/motorista', result)
+          .then(response =>{
+              console.log(response)
+            // toggleDrawer('right', false)
+
+          })
+        //   .catch(error => toast.info("Não é possível alterar motorista, descrição já cadastrada!"))
+        }
+
+
+        function FormTipo({ onSubmit }) {
+
+          const [ descricao, setDescricao] =useState('')
+
+          async function handleSubmit(e){
+              e.preventDefault();
+
+              await onSubmit({
+                  descricao,
+              });
+
+              setDescricao('')
+
+            }
+
+          return (
+              <h1>Carlos</h1>
+          )
+      }
+
+        const toggleDrawer = (side, open) => event => {
+          if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+              return;
+          }
+          setState({ ...state, [side]: open });
+        };
+
+        const sideList = side => (
+            <>
+            <FormTipo
+              className={classes.table}
+              onClick={toggleDrawer(side, false)}
+              onKeyDown={toggleDrawer(side, false)}
+              role="presentation"
+              onSubmit={UpdateTipo} />
+
+          </>
+        );
+
+        return (
+          <div>
+            <button type="" title="Editar Produto" onClick={toggleDrawer('right', true)}>
+                <FontAwesomeIcon icon={faPencilAlt} color="#000" />
+            </button>
+
+            <Drawer anchor="right" open={state.right} onClose={toggleDrawer('right', false)}>
+              {sideList('right')}
+            </Drawer>
+          </div>
+        );
+    }
+
+    
     function ItemLista({item}) {
-    
+        
         const [detalhes, setDetalhes] = useState(false);
-    
+
         return (
             <div 
                 className="corpo-item-lista"
@@ -40,24 +137,20 @@ export default function Componentes() {
                             {item.nome}
                         </div>
                         <div className="quantidade">
-                            {`${item.recuo} recuo`}
+                            <img src={item.imagem} alt=""/>
+                            {/* {`${item.precoPorMetroQuadrado} m²`} */}
                         </div>
                     </div>
                     <div className="item-lista-acoes">
-                        {/* <button type="" title="Adicionar Estoque">
+                        <button type="" title="Adicionar Estoque">
                             <FontAwesomeIcon icon={faPlus} color="#a8ffe5" style={{marginRight: '2px'}}/>
                             <FontAwesomeIcon icon={faBox} color="#a8ffe5"/>
-                        </button> */}
-                        <button type="" title="Excluir Produto">
-                            {/* <FontAwesomeIcon icon={faTrash} color="#fa9588"/> */}
-                            <DialogMotorista value={item.id} />
                         </button>
-                        {/* <button type="" title="Editar Produto">
-                            <FontAwesomeIcon icon={faPencilAlt} color="#DDD" />
-                        </button> */}
+                        <DialogMotorista />
+                        <TemporaryDrawer />
                     </div>
                 </div>
-    
+
                 {
                     detalhes && 
                     <div className="item-detalhes">
@@ -66,22 +159,39 @@ export default function Componentes() {
                             <span>{item.nome}</span>
                         </div>
                         <div className="campos">
-                            <strong>Imagem: </strong>
-                            <span>{item.imagem}</span>
+                            <strong>Categoria: </strong>
+                            <span>{item.categoria}</span>
                         </div>
                         <div className="campos">
-                            <strong>Recuo: </strong>
-                            <span>{item.recuo}</span>
+                            <strong>Unidade de Medida: </strong>
+                            <span>{item.unidadeMedida}</span>
                         </div>
                         <div className="campos">
                             <strong>Estoque: </strong>
-                            <span>{item.idEstoque}</span>
+                            <span>{item.estoque}</span>
+                        </div>
+                        <div className="campos">
+                            <strong>Valor de Compra: </strong>
+                            <span>{item.valorCompra}</span>
+                        </div>
+                        <div className="campos">
+                            <strong>Valor de Venda: </strong>
+                            <span>{item.precoPorMetroQuadrado} m²</span>
+                        </div>
+                        <div className="campos">
+                            <strong>Preço do Estoque: </strong>
+                            <span>{item.valorCompra * item.estoque}</span>
+                        </div>
+                        <div className="campos">
+                            {/* <strong>Preço do Estoque: </strong>
+                            <span>{item.valorCompra * item.estoque}</span> */}
                         </div>
                     </div>
                 }
             </div>
         );
     }
+
 
     function DialogMotorista(marca) {
         const id = marca.value;
@@ -93,21 +203,14 @@ export default function Componentes() {
           setOpen(true);
           loadStep()
       };
-        async function loadStep(){
-            var formData = new FormData()
-            formData.append('id', id)
-            const response = await api.post(`/componente/detalhe/`, formData)
-            setMarcaIn(response.data.componentes)
-            console.log(response.data.componentes)
-        }
+          async function loadStep(){
+              const response = await api.get(`/service/motorista/id?id=${id}`)
+              setMarcaIn(response.data[0])
+          }
 
         async function DeleteMarca(){
-            var formData = new FormData();
-            formData.append('id', id)
-            api.post(`/componente/remover/`,formData)
+            api.delete(`/service/motorista/id?id=${id}`)
             .then( response=> {
-                console.log(response.data)
-                loadProdutos()
                 // toast.info(response.data[0])
                 // loadMotoristas()
             })
@@ -132,7 +235,7 @@ export default function Componentes() {
 
             >
               <div className='dialog-confirm'>
-                  <DialogTitle id="alert-dialog-title"> <p>Excluir Componente?</p></DialogTitle>
+                  <DialogTitle id="alert-dialog-title"> <p> Excluir Motorista? </p></DialogTitle>
                   <DialogContent>
                   <DialogContentText id="alert-dialog-description">
                       <h3>{marcain.nome}</h3>
@@ -155,29 +258,34 @@ export default function Componentes() {
     function Formulario() {
         const [ nome, setNome ] = useState('')
         const [ imagem, setImagem ] = useState('')
-        const [ recuo, setRecuo ] = useState('')
-        const [ estoque, setEstoque ] = useState('')
+        const [ codigo, setCodigo ] = useState('')
+        const [ margem, setMargem ] = useState('')
+        const [ perda, setPerda ] = useState('')
 
         async function handleSubmit(e){
         
             e.preventDefault();
+      
+            console.log(nome)
+            console.log(imagem)
     
             var formData = new FormData();
             // formData.append('id', id)
             formData.append('nome', document.getElementById('nome').value)
             formData.append('imagem', imagem)
-            formData.append('recuo', recuo)
-            formData.append('idEstoque', document.getElementById('estoque').value)
-            api.post('componente/criar/',formData)
+            formData.append('codigo', codigo)
+            formData.append('margemDeErro', margem)
+            formData.append('porcentagemDePerda', perda)
+            api.post('produto/criar/',formData)
             .then(response => {
                 console.log('RESPOSTA',response)
-                loadProdutos()
+                loadEstoque()
             })
             .catch(error => console.log(error.response))
         }
         return (
             <div className="form-cadastro">
-                <h2>Cadastrar Componente</h2>
+                <h2>Cadastrar Estoque</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="form-campo">
                         <label htmlFor="" className="form-label" >Nome</label>
@@ -186,24 +294,19 @@ export default function Componentes() {
                     <div className="form-campo">
                         <label htmlFor="" className="form-label" >Imagem</label>
                         <input type="file" className="form-input" id='imagem' onChange={e=> setImagem(e.target.files[0])}/>
-                    </div>
-
+                    </div>                    
                     <div className="form-campo">
-                        <label htmlFor="" className="form-label" >Recuo</label>
-                        <input type="text" className="form-input" id='recuo' onChange={e=> setRecuo(e.target.value)}/>
+                        <label htmlFor="" className="form-label" >Código</label>
+                        <input type="text" className="form-input" id='codigo' onChange={e=> setCodigo(e.target.value)}/>
                     </div>
-
                     <div className="form-campo">
-                        <label htmlFor="" className="form-label" >Estoque</label>
-                        <select className="form-input" id='estoque' onChange={e=> setEstoque(e.target.value)}> 
-                            {
-                                estoques.map(estoque => (
-                                <option value={estoque.id} >{estoque.descricao}</option>
-                                ))
-                            }
-                        </select>
-                    </div>                   
-    
+                        <label htmlFor="" className="form-label" >Margem de Erro</label>
+                        <input type="text" className="form-input" id='margemDeErro' onChange={e=> setMargem(e.target.value)}/>
+                    </div>
+                    <div className="form-campo">
+                        <label htmlFor="" className="form-label" >% Perda</label>
+                        <input type="text" className="form-input" id='porcentagemDePerda' onChange={e=> setPerda(e.target.value)}/>
+                    </div>
                     <div>
                         <button type="submit" className="btn btn-confirma">Salvar</button>
                         {/* <button className="btn btn-limpar">Limpar</button> */}
@@ -214,23 +317,16 @@ export default function Componentes() {
     }
 
 
-    function loadProdutos(){
-        api.post('componente/detalhe/')
+    function loadEstoque(){
+        api.post('estoque/detalhe/')
         .then(response => {
             console.log(response.data)
-            setProdutos(response.data.componentes)
+            setEstoque(response.data.estoque)
         })
         .catch(error => console.log(error.response))
     }
-    function loadEstoques(){
-        api.post('estoque/detalhe/')
-        .then(response => setEstoques(response.data.estoque))
-        .catch(error => console.log(error.response))
-    }
-
     useEffect(() => {
-        loadProdutos()
-        loadEstoques()
+        loadEstoque()
     }, [])
 
     return (
@@ -242,7 +338,7 @@ export default function Componentes() {
             <div className="home-produtos-corpo">
                 <Formulario /> 
                 <div className="lista">
-                    <h2>Lista de Componentes</h2>
+                    <h2>Lista de Estoque</h2>
 
                     <div className="lista-busca">
                         <form>
@@ -251,13 +347,7 @@ export default function Componentes() {
                         </form>
                     </div>
                     <div className="corpo-lista">
-                        {!produtos ?(
-                            <>
-                                <h6>Ainda não temos itens cadastrados :(</h6>
-                                <h6>Cadastre uma nova regra no formulário ao lado.</h6>
-                            </>
-                        ):
-                        produtos.map((item, indice) => (
+                        {estoque.map((item, indice) => (
                             <ItemLista item={item} key={indice}/>
                         ))}
                     </div>

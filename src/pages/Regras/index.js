@@ -5,113 +5,121 @@ import { faTrash, faPencilAlt, faPlus, faBox } from '@fortawesome/free-solid-svg
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Cabecalho from '../../components/Cabecalho';
 
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
 import './style.css';
 
-function ItemLista({item}) {
-    console.log('ITEM', item)
-    var idSub = item.subProduto
-    var formData = new FormData();
-        formData.append('id', item.subProduto)
-        console.log(formData)
-    api.post(`subproduto/detalhe/`,formData)
-    .then(response => {
-        console.log('SUUBBB->', response.data)
-        setSubdetalhe(response.data.subprodutos)
-    })
-    .catch(error => console.log(error.response))
-
-    const [ subdetalhe, setSubdetalhe ] = useState([])
-    const [detalhes, setDetalhes] = useState(false);
-
-    return (
-        <div 
-            className="corpo-item-lista"
-            style={detalhes ? {maxHeight: "none"} : {maxHeight: "55px"}}
-        >
-            <div 
-                className="item-lista" 
-                title="Clique para ver os detalhes"
-                onClick={() => setDetalhes(!detalhes)}                
-            >
-                <div className="item-lista-id">{item.id}</div>
-                <div className="item-lista-dados-principais">
-                    <div className="nome">
-                        {subdetalhe.nome}
-                    </div>
-                    <div className="quantidade">
-                        {`${item.ajusteAltura} ajuste altura`}
-                    </div>
-                </div>
-                <div className="item-lista-acoes">
-                    <button type="" title="Adicionar Estoque">
-                        <FontAwesomeIcon icon={faPlus} color="#a8ffe5" style={{marginRight: '2px'}}/>
-                        <FontAwesomeIcon icon={faBox} color="#a8ffe5"/>
-                    </button>
-                    <button type="" title="Excluir Produto">
-                        <FontAwesomeIcon icon={faTrash} color="#fa9588"/>
-                    </button>
-                    <button type="" title="Editar Produto">
-                        <FontAwesomeIcon icon={faPencilAlt} color="#DDD" />
-                    </button>
-                </div>
-            </div>
-
-            {
-                detalhes && 
-                <div className="item-detalhes">
-                    <div className="campos">
-                        <strong>Descrição: </strong>
-                        <span>{subdetalhe.nome}</span>
-                    </div>
-                    <div className="campos">
-                        <strong>Ajuste altura: </strong>
-                        <span>{item.ajusteAltura}</span>
-                    </div>
-                    <div className="campos">
-                        <strong>Ajuste Comprimento: </strong>
-                        <span>{item.ajusteComprimento}</span>
-                    </div>
-                    <div className="campos">
-                        <strong>Estoque: </strong>
-                        <span>{item.estoque}</span>
-                    </div>
-                    <div className="campos">
-                        <strong>Valor de Compra: </strong>
-                        <span>{item.valorCompra}</span>
-                    </div>
-                    <div className="campos">
-                        <strong>Valor de Venda: </strong>
-                        <span>{item.precoPorMetroQuadrado} m²</span>
-                    </div>
-                    <div className="campos">
-                        <strong>Preço do Estoque: </strong>
-                        <span>{item.valorCompra * item.estoque}</span>
-                    </div>
-                    <div className="campos">
-                        {/* <strong>Preço do Estoque: </strong>
-                        <span>{item.valorCompra * item.estoque}</span> */}
-                    </div>
-                </div>
-            }
-        </div>
-    );
-}
 
 export default function Regras() {
-
+    
     const [ regras, setRegras ] = useState([])
     const [ subs, setSubs ] = useState([])
-
+    
+    function ItemLista({item}) {
+        console.log('ITEM', item)
+        var idSub = item.subProduto
+        var formData = new FormData();
+            formData.append('id', item.subProduto)
+            console.log(formData)
+        api.post(`subproduto/detalhe/`,formData)
+        .then(response => {
+            console.log('SUUBBB->', response.data)
+            setSubdetalhe(response.data.subprodutos)
+        })
+        .catch(error => console.log(error.response))
+    
+        const [ subdetalhe, setSubdetalhe ] = useState([])
+        const [detalhes, setDetalhes] = useState(false);
+    
+        return (
+            <div 
+                className="corpo-item-lista"
+                style={detalhes ? {maxHeight: "none"} : {maxHeight: "55px"}}
+            >
+                <div 
+                    className="item-lista" 
+                    title="Clique para ver os detalhes"
+                    onClick={() => setDetalhes(!detalhes)}                
+                >
+                    <div className="item-lista-id">{item.id}</div>
+                    <div className="item-lista-dados-principais">
+                        <div className="nome">
+                            {subdetalhe.nome}
+                        </div>
+                        <div className="quantidade">
+                            {`${item.ajusteAltura} ajuste altura`}
+                        </div>
+                    </div>
+                    <div className="item-lista-acoes">
+                        {/* <button type="" title="Adicionar Estoque">
+                            <FontAwesomeIcon icon={faPlus} color="#a8ffe5" style={{marginRight: '2px'}}/>
+                            <FontAwesomeIcon icon={faBox} color="#a8ffe5"/>
+                        </button> */}
+                        <button type="" title="Excluir Produto">
+                            {/* <FontAwesomeIcon icon={faTrash} color="#fa9588"/> */}
+                            <DialogMotorista value={item.id} />
+                            
+                        </button>
+                        {/* <button type="" title="Editar Produto">
+                            <FontAwesomeIcon icon={faPencilAlt} color="#DDD" />
+                        </button> */}
+                    </div>
+                </div>
+    
+                {
+                    detalhes && 
+                    <div className="item-detalhes">
+                        <div className="campos">
+                            <strong>Descrição: </strong>
+                            <span>{subdetalhe.nome}</span>
+                        </div>
+                        <div className="campos">
+                            <strong>Ajuste altura: </strong>
+                            <span>{item.ajusteAltura}</span>
+                        </div>
+                        <div className="campos">
+                            <strong>Ajuste Comprimento: </strong>
+                            <span>{item.ajusteComprimento}</span>
+                        </div>
+                        <div className="campos">
+                            <strong>Estoque: </strong>
+                            <span>{item.estoque}</span>
+                        </div>
+                        <div className="campos">
+                            <strong>Valor de Compra: </strong>
+                            <span>{item.valorCompra}</span>
+                        </div>
+                        <div className="campos">
+                            <strong>Valor de Venda: </strong>
+                            <span>{item.precoPorMetroQuadrado} m²</span>
+                        </div>
+                        <div className="campos">
+                            <strong>Preço do Estoque: </strong>
+                            <span>{item.valorCompra * item.estoque}</span>
+                        </div>
+                        <div className="campos">
+                            {/* <strong>Preço do Estoque: </strong>
+                            <span>{item.valorCompra * item.estoque}</span> */}
+                        </div>
+                    </div>
+                }
+            </div>
+        );
+    }
+    
     function loadSub(){
-        api.post('subproduto/detalhe/')
+        api.post('vidro/detalhe/')
         .then(response => {
             console.log(response.data)
-            setSubs(response.data.subprodutos)
+            setSubs(response.data.vidro)
         })
     }
 
     function Formulario() {
-        const [ subProduto, setSubProduto ] = useState('')
+        const [ vidro, setVidro ] = useState('')
         const [ ajusteAltura, setAjusteAltura ] = useState('')
         const [ ajusteComprimento, setAjusteComprimento ] = useState('')
 
@@ -121,7 +129,7 @@ export default function Regras() {
     
             var formData = new FormData();
             // formData.append('id', id)
-            formData.append('subProduto', subProduto)
+            formData.append('idVidro', document.getElementById('vidro').value)
             formData.append('ajusteAltura', ajusteAltura)
             formData.append('ajusteComprimento', ajusteComprimento)
             console.log(formData)
@@ -137,8 +145,8 @@ export default function Regras() {
                 <h2>Cadastrar Regra</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="form-campo">
-                        <label htmlFor="" className="form-label" >Sub-Produto</label>
-                        <select type="text" className="form-input" id='nome' onChange={e=> setSubProduto(e.target.value)}>
+                        <label htmlFor="" className="form-label" >Vidro</label>
+                        <select type="text" className="form-input" id='vidro' onChange={e=> setVidro(e.target.value)}>
                             {
                                 subs.map(sub=>(
                                     <option key={sub.id} value={sub.id}>{sub.nome}</option>
@@ -164,6 +172,74 @@ export default function Regras() {
         );
     }
 
+    function DialogMotorista(marca) {
+        const id = marca.value;
+        console.log(marca)
+        const [open, setOpen] = React.useState(false);
+        const [ marcain , setMarcaIn ] = React.useState([]);
+
+        const handleClickOpen = () => {
+          setOpen(true);
+          loadStep()
+      };
+        async function loadStep(){
+            var formData = new FormData()
+            formData.append('id', id)
+            const response = await api.post(`/regra/detalhe/`, formData)
+            setMarcaIn(response.data.componentes)
+            console.log(response.data.componentes)
+        }
+
+        async function DeleteMarca(){
+            var formData = new FormData();
+            formData.append('id', id)
+            api.post(`/regra/remover/`,formData)
+            .then( response=> {
+                console.log(response.data)
+                loadRegras()
+                // toast.info(response.data[0])
+                // loadMotoristas()
+            })
+            .catch(error=> console.log(error))
+            setOpen(false);
+        }
+
+        const handleClose = () => {
+          setOpen(false);
+        };
+
+        return (
+          <div className='dialog'>
+            <button title="Excluir Produto" onClick={handleClickOpen}>
+                <FontAwesomeIcon icon={faTrash} color="#fa9588"/>
+            </button>
+            <Dialog
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+
+            >
+              <div className='dialog-confirm'>
+                  <DialogTitle id="alert-dialog-title"> <p>Excluir Regra?</p></DialogTitle>
+                  <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                      {/* <h3>{marcain.nome}</h3> */}
+                  </DialogContentText>
+                  </DialogContent>
+                  <div className='dialog-btns'>
+                  <button onClick={handleClose} className='btn-negative'>
+                      NÃO
+                  </button>
+                  <button onClick={DeleteMarca} className='btn-confirm' autoFocus>
+                      SIM
+                  </button>
+                  </div>
+              </div>
+            </Dialog>
+          </div>
+        );
+    }
 
     function loadRegras(){
         api.post('regra/detalhe/')

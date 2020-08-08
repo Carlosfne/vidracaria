@@ -20,12 +20,40 @@
 }
 
 .dialog-confirm{
-    width: 250px;
+    width: 450px;
     height: 150px;
     display: flex;
-    flex-direction: column;
+    flex-direction: column;    
 }
 .MuiPaper-root {
-    width: 350px;
+    width: 450px;
     height: 200px;
+}
+.dialog-confirm p {
+    font-weight: 550;
+    font-size: 22px;
+}
+.dialog-confirm button {
+    width: 80px;
+    height: 35px;
+    margin-top: -20px;  
+}
+.btn-negative{
+    background-color: black;
+    color: #fff;
+    font-size: large;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
+    z-index: 1;
+}
+.btn-confirm {
+    background-color: #ff0000;
+    color: #fff;
+    font-size: large;
+    font-weight: 600;
+    border-radius: 10px;
+    border-color: #ff0000;
+    cursor: pointer;
+    z-index: 1;
 }
