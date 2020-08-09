@@ -142,12 +142,12 @@ export default function Estoque() {
                         </div>
                     </div>
                     <div className="item-lista-acoes">
-                        <button type="" title="Adicionar Estoque">
+                        {/* <button type="" title="Adicionar Estoque">
                             <FontAwesomeIcon icon={faPlus} color="#a8ffe5" style={{marginRight: '2px'}}/>
                             <FontAwesomeIcon icon={faBox} color="#a8ffe5"/>
-                        </button>
-                        <DialogMotorista />
-                        <TemporaryDrawer />
+                        </button> */}
+                        <DialogMotorista value={item.id}/>
+                        {/* <TemporaryDrawer /> */}
                     </div>
                 </div>
 
@@ -204,15 +204,19 @@ export default function Estoque() {
           loadStep()
       };
           async function loadStep(){
-              const response = await api.get(`/service/motorista/id?id=${id}`)
+              var formData = new FormData()
+              formData.append('id', id)
+              const response = await api.post(`/estoque/detalhe/`, formData)
               setMarcaIn(response.data[0])
           }
 
         async function DeleteMarca(){
-            api.delete(`/service/motorista/id?id=${id}`)
+            var formData = new FormData()
+            formData.append('id', id)
+            api.post(`/estoque/remover/`, formData)
             .then( response=> {
                 // toast.info(response.data[0])
-                // loadMotoristas()
+                loadEstoque()
             })
             .catch(error=> console.log(error))
             setOpen(false);
@@ -238,7 +242,7 @@ export default function Estoque() {
                   <DialogTitle id="alert-dialog-title"> <p> Excluir Motorista? </p></DialogTitle>
                   <DialogContent>
                   <DialogContentText id="alert-dialog-description">
-                      <h3>{marcain.nome}</h3>
+                      {/* <h3>{marcain.nome}</h3> */}
                   </DialogContentText>
                   </DialogContent>
                   <div className='dialog-btns'>
@@ -256,27 +260,35 @@ export default function Estoque() {
     }
 
     function Formulario() {
-        const [ nome, setNome ] = useState('')
-        const [ imagem, setImagem ] = useState('')
-        const [ codigo, setCodigo ] = useState('')
-        const [ margem, setMargem ] = useState('')
-        const [ perda, setPerda ] = useState('')
+        const [ descricao, setDescricao ] = useState('')
+        const [ quantidade, setQuantidade ] = useState('')
+        const [ quantidadeMinima, setQuantidadeMinima ] = useState('')
+        const [ quantidadeMaxima, setQuantidadeMaxima ] = useState('')
+        const [ unidadeMedida, setUnidadeMedida ] = useState('')
+        const [ validade, setValidade ] = useState('')
+        const [ numeroSerie, setNumeroSerie ] = useState('')
+        const [ lote, setLote ] = useState('')
+        const [ custo, setCusto ] = useState('')
+        const [ fornecedor, setFornecedor ] = useState('')
+        
 
         async function handleSubmit(e){
         
             e.preventDefault();
-      
-            console.log(nome)
-            console.log(imagem)
     
             var formData = new FormData();
             // formData.append('id', id)
-            formData.append('nome', document.getElementById('nome').value)
-            formData.append('imagem', imagem)
-            formData.append('codigo', codigo)
-            formData.append('margemDeErro', margem)
-            formData.append('porcentagemDePerda', perda)
-            api.post('produto/criar/',formData)
+            formData.append('descricao', descricao)
+            formData.append('quantidade', quantidade)
+            formData.append('quantidadeMinima', quantidadeMinima)
+            formData.append('quantidadeMaxima', quantidadeMaxima)
+            formData.append('unidadeMedida', unidadeMedida)
+            formData.append('validade', validade)
+            formData.append('numeroSerie', numeroSerie)
+            formData.append('lote', lote)
+            formData.append('custo', custo)
+            formData.append('fornecedor', fornecedor)
+            api.post('estoque/criar/',formData)
             .then(response => {
                 console.log('RESPOSTA',response)
                 loadEstoque()
@@ -288,25 +300,45 @@ export default function Estoque() {
                 <h2>Cadastrar Estoque</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="form-campo">
-                        <label htmlFor="" className="form-label" >Nome</label>
-                        <input type="text" className="form-input" id='nome' onChange={e=> setNome(e.target.value)}/>
+                        <label htmlFor="" className="form-label" >Descricao</label>
+                        <input type="text" className="form-input" id='descricao' onChange={e=> setDescricao(e.target.value)} />
                     </div>
                     <div className="form-campo">
-                        <label htmlFor="" className="form-label" >Imagem</label>
-                        <input type="file" className="form-input" id='imagem' onChange={e=> setImagem(e.target.files[0])}/>
+                        <label htmlFor="" className="form-label" >Quantidade</label>
+                        <input type="text" className="form-input" id='quantidade' onChange={e=> setQuantidade(e.target.value)} />
                     </div>                    
                     <div className="form-campo">
-                        <label htmlFor="" className="form-label" >Código</label>
-                        <input type="text" className="form-input" id='codigo' onChange={e=> setCodigo(e.target.value)}/>
-                    </div>
+                        <label htmlFor="" className="form-label" >Quantidade Mínima</label>
+                        <input type="text" className="form-input" id='quantidadeMinima' onChange={e=> setQuantidadeMinima(e.target.value)} />
+                    </div>                    
                     <div className="form-campo">
-                        <label htmlFor="" className="form-label" >Margem de Erro</label>
-                        <input type="text" className="form-input" id='margemDeErro' onChange={e=> setMargem(e.target.value)}/>
-                    </div>
+                        <label htmlFor="" className="form-label" >Quantidade Máxima</label>
+                        <input type="text" className="form-input" id='quantidadeMaxima' onChange={e=> setQuantidadeMaxima(e.target.value)} />
+                    </div>                    
                     <div className="form-campo">
-                        <label htmlFor="" className="form-label" >% Perda</label>
-                        <input type="text" className="form-input" id='porcentagemDePerda' onChange={e=> setPerda(e.target.value)}/>
-                    </div>
+                        <label htmlFor="" className="form-label" >Unidade Medida</label>
+                        <input type="text" className="form-input" id='unidadeMedida' onChange={e=> setUnidadeMedida(e.target.value)} />
+                    </div>                    
+                    <div className="form-campo">
+                        <label htmlFor="" className="form-label" >Validade</label>
+                        <input type="text" className="form-input" id='validade' onChange={e=> setValidade(e.target.value)} />
+                    </div>                    
+                    <div className="form-campo">
+                        <label htmlFor="" className="form-label" >Número de Série</label>
+                        <input type="text" className="form-input" id='validade' onChange={e=> setNumeroSerie(e.target.value)} />
+                    </div>                    
+                    <div className="form-campo">
+                        <label htmlFor="" className="form-label" >Lote</label>
+                        <input type="text" className="form-input" id='validade' onChange={e=> setLote(e.target.value)} />
+                    </div>                    
+                    <div className="form-campo">
+                        <label htmlFor="" className="form-label" >Custo</label>
+                        <input type="text" className="form-input" id='validade' onChange={e=> setCusto(e.target.value)} />
+                    </div>                    
+                    <div className="form-campo">
+                        <label htmlFor="" className="form-label" >Fornecedor</label>
+                        <input type="text" className="form-input" id='validade' onChange={e=> setFornecedor(e.target.value)} />
+                    </div>                    
                     <div>
                         <button type="submit" className="btn btn-confirma">Salvar</button>
                         {/* <button className="btn btn-limpar">Limpar</button> */}

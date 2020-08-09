@@ -25,6 +25,8 @@ const useStyles = makeStyles({
 export default function Projeto() {
 
     const [ produtos, setProdutos ] = useState([])
+    const [ produto, setProduto ] = useState([])
+    const [ clientes, setClientes ] = useState([])
 
     function TemporaryDrawer(marca) {
         const id = marca.value
@@ -142,12 +144,12 @@ export default function Projeto() {
                         </div>
                     </div>
                     <div className="item-lista-acoes">
-                        <button type="" title="Adicionar Estoque">
+                        {/* <button type="" title="Adicionar Estoque">
                             <FontAwesomeIcon icon={faPlus} color="#a8ffe5" style={{marginRight: '2px'}}/>
                             <FontAwesomeIcon icon={faBox} color="#a8ffe5"/>
-                        </button>
-                        <DialogMotorista />
-                        <TemporaryDrawer />
+                        </button> */}
+                        <DialogMotorista value={item.id} />
+                        {/* <TemporaryDrawer /> */}
                     </div>
                 </div>
 
@@ -203,15 +205,19 @@ export default function Projeto() {
           loadStep()
       };
           async function loadStep(){
-              const response = await api.get(`/service/motorista/id?id=${id}`)
+            var formData = new FormData()
+            formData.append('id', id)
+              const response = await api.post(`/projetos/detalhe/`, formData)
               setMarcaIn(response.data[0])
           }
 
         async function DeleteMarca(){
-            api.delete(`/service/motorista/id?id=${id}`)
+            var formData = new FormData()
+            formData.append('id', id)
+            api.post(`/projetos/remover/`, formData)
             .then( response=> {
                 // toast.info(response.data[0])
-                // loadMotoristas()
+                loadProdutos()
             })
             .catch(error=> console.log(error))
             setOpen(false);
@@ -237,7 +243,7 @@ export default function Projeto() {
                   <DialogTitle id="alert-dialog-title"> <p> Excluir Motorista? </p></DialogTitle>
                   <DialogContent>
                   <DialogContentText id="alert-dialog-description">
-                      <h3>{marcain.nome}</h3>
+                      {/* <h3>{marcain.nome}</h3> */}
                   </DialogContentText>
                   </DialogContent>
                   <div className='dialog-btns'>
@@ -255,27 +261,24 @@ export default function Projeto() {
     }
 
     function Formulario() {
-        const [ nome, setNome ] = useState('')
-        const [ imagem, setImagem ] = useState('')
-        const [ codigo, setCodigo ] = useState('')
-        const [ margem, setMargem ] = useState('')
-        const [ perda, setPerda ] = useState('')
+        const [ cliente, setCliente ] = useState('')
+        const [ produtoID, setProdutoID ] = useState('')
+        const [ comprimento, setComprimento ] = useState('')
+        const [ altura, setAltura ] = useState('')
+        const [ largura, setLargura ] = useState('')
 
         async function handleSubmit(e){
         
-            e.preventDefault();
-      
-            console.log(nome)
-            console.log(imagem)
+            e.preventDefault();      
     
             var formData = new FormData();
             // formData.append('id', id)
-            formData.append('nome', document.getElementById('nome').value)
-            formData.append('imagem', imagem)
-            formData.append('codigo', codigo)
-            formData.append('margemDeErro', margem)
-            formData.append('porcentagemDePerda', perda)
-            api.post('produto/criar/',formData)
+            formData.append('idCliente', document.getElementById('cliente').value)
+            formData.append('idProduto', document.getElementById('produto').value)
+            formData.append('comprimentoVao', comprimento)
+            formData.append('alturaVao', altura)
+            formData.append('larguraVao', largura)
+            api.post('projetos/criar/',formData)
             .then(response => {
                 console.log('RESPOSTA',response)
                 loadProdutos()
@@ -287,24 +290,40 @@ export default function Projeto() {
                 <h2>Cadastrar Projeto</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="form-campo">
-                        <label htmlFor="" className="form-label" >Nome</label>
-                        <input type="text" className="form-input" id='nome' onChange={e=> setNome(e.target.value)}/>
+                        <label htmlFor="" className="form-label" >Cliente</label>
+                        <select className="form-input select" id='cliente' onChange={e=> setCliente(e.target.value)}>
+                            {
+                                clientes.map(cliente =>(
+                                    <option key={cliente.id} value={cliente.id}>
+                                        {cliente.nome}
+                                    </option>
+                                ))
+                            }
+                        </select>
                     </div>
                     <div className="form-campo">
-                        <label htmlFor="" className="form-label" >Imagem</label>
-                        <input type="file" className="form-input" id='imagem' onChange={e=> setImagem(e.target.files[0])}/>
+                        <label htmlFor="" className="form-label" >Produto</label>
+                        <select className="form-input select" id='produto' onChange={e=> setProdutoID(e.target.value)}>
+                            {
+                                produto.map(produto =>(
+                                    <option key={produto.id} value={produto.id}>
+                                        {produto.nome}
+                                    </option>
+                                ))
+                            }
+                        </select>
                     </div>                    
                     <div className="form-campo">
-                        <label htmlFor="" className="form-label" >Código</label>
-                        <input type="text" className="form-input" id='codigo' onChange={e=> setCodigo(e.target.value)}/>
+                        <label htmlFor="" className="form-label" >Comprimento Vão</label>
+                        <input type="text" className="form-input" id='comprimento' onChange={e=> setComprimento(e.target.value)}/>
                     </div>
                     <div className="form-campo">
-                        <label htmlFor="" className="form-label" >Margem de Erro</label>
-                        <input type="text" className="form-input" id='margemDeErro' onChange={e=> setMargem(e.target.value)}/>
+                        <label htmlFor="" className="form-label" >Altura Vão</label>
+                        <input type="text" className="form-input" id='altura' onChange={e=> setAltura(e.target.value)}/>
                     </div>
                     <div className="form-campo">
-                        <label htmlFor="" className="form-label" >% Perda</label>
-                        <input type="text" className="form-input" id='porcentagemDePerda' onChange={e=> setPerda(e.target.value)}/>
+                        <label htmlFor="" className="form-label" >Largura vão</label>
+                        <input type="text" className="form-input" id='largura' onChange={e=> setLargura(e.target.value)}/>
                     </div>
                     <div>
                         <button type="submit" className="btn btn-confirma">Salvar</button>
@@ -317,15 +336,34 @@ export default function Projeto() {
 
 
     function loadProdutos(){
+        api.post('projetos/detalhe/')
+        .then(response => {
+            console.log(response.data)
+            setProdutos(response.data.projetos)
+        })
+        .catch(error => console.log(error.response))
+    }
+
+    function loadCliente(){
+        api.post('cliente/detalhe/')
+        .then(response => {
+            console.log(response.data)
+            setClientes(response.data.clientes)
+        })
+        .catch(error => console.log(error.response))
+    }
+    function loadProduto(){
         api.post('produto/detalhe/')
         .then(response => {
             console.log(response.data)
-            setProdutos(response.data.produtos)
+            setProduto(response.data.produtos)
         })
         .catch(error => console.log(error.response))
     }
     useEffect(() => {
         loadProdutos()
+        loadCliente()
+        loadProduto()
     }, [])
 
     return (
@@ -355,47 +393,3 @@ export default function Projeto() {
         </div>
     )
 }
-
-
-const PRODUTOS = [
-    {
-        id: 1,
-        nome: 'Biscoito Trakinas',
-        descricao: 'Biscoito recheado de 200gr',
-        categoria: 'Alimentos',
-        valorCompra: 1.50,
-        valorVenda: 2.99,
-        unidadeMedida: 'Unidades',
-        estoque: 50,
-    },
-    {
-        id: 2,
-        nome: 'Biscoito Piraquê',
-        descricao: 'Biscoito recheado de 200gr',
-        categoria: 'Alimentos',
-        valorCompra: 1.50,
-        valorVenda: 2.99,
-        unidadeMedida: 'Unidades',
-        estoque: 44,
-    },
-    {
-        id: 3,
-        nome: 'Biscoito Cheetos Requeijão',
-        descricao: 'Biscoito recheado de 200gr',
-        categoria: 'Alimentos',
-        valorCompra: 1.50,
-        valorVenda: 2.99,
-        unidadeMedida: 'Unidades',
-        estoque: 26,
-    },
-    {
-        id: 4,
-        nome: 'Biscoito Batata Ruffles',
-        descricao: 'Biscoito recheado de 200gr',
-        categoria: 'Alimentos',
-        valorCompra: 1.50,
-        valorVenda: 2.99,
-        unidadeMedida: 'Unidades',
-        estoque: 13,
-    },
-];

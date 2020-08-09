@@ -146,7 +146,7 @@ export default function Regras() {
                 <form onSubmit={handleSubmit}>
                     <div className="form-campo">
                         <label htmlFor="" className="form-label" >Vidro</label>
-                        <select type="text" className="form-input" id='vidro' onChange={e=> setVidro(e.target.value)}>
+                        <select type="text" className="form-input select" id='vidro' onChange={e=> setVidro(e.target.value)}>
                             {
                                 subs.map(sub=>(
                                     <option key={sub.id} value={sub.id}>{sub.nome}</option>

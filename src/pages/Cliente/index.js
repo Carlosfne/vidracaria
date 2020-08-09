@@ -142,12 +142,12 @@ export default function Cliente() {
                         </div>
                     </div>
                     <div className="item-lista-acoes">
-                        <button type="" title="Adicionar Estoque">
+                        {/* <button type="" title="Adicionar Estoque">
                             <FontAwesomeIcon icon={faPlus} color="#a8ffe5" style={{marginRight: '2px'}}/>
                             <FontAwesomeIcon icon={faBox} color="#a8ffe5"/>
-                        </button>
-                        <DialogMotorista />
-                        <TemporaryDrawer />
+                        </button> */}
+                        <DialogMotorista value={item.id} />
+                        {/* <TemporaryDrawer /> */}
                     </div>
                 </div>
 
@@ -203,15 +203,19 @@ export default function Cliente() {
           loadStep()
       };
           async function loadStep(){
-              const response = await api.get(`/service/motorista/id?id=${id}`)
+              var formData = new FormData()
+              formData.append('id', id)
+              const response = await api.post(`/cliente/detalhe/`, formData)
               setMarcaIn(response.data[0])
           }
 
         async function DeleteMarca(){
-            api.delete(`/service/motorista/id?id=${id}`)
+            var formData = new FormData()
+              formData.append('id', id)
+            api.post(`/cliente/remover/`, formData)
             .then( response=> {
                 // toast.info(response.data[0])
-                // loadMotoristas()
+                loadClientes()
             })
             .catch(error=> console.log(error))
             setOpen(false);
@@ -237,7 +241,7 @@ export default function Cliente() {
                   <DialogTitle id="alert-dialog-title"> <p> Excluir Motorista? </p></DialogTitle>
                   <DialogContent>
                   <DialogContentText id="alert-dialog-description">
-                      <h3>{marcain.nome}</h3>
+                      {/* <h3>{marcain.nome}</h3> */}
                   </DialogContentText>
                   </DialogContent>
                   <div className='dialog-btns'>
@@ -256,26 +260,23 @@ export default function Cliente() {
 
     function Formulario() {
         const [ nome, setNome ] = useState('')
-        const [ imagem, setImagem ] = useState('')
-        const [ codigo, setCodigo ] = useState('')
-        const [ margem, setMargem ] = useState('')
-        const [ perda, setPerda ] = useState('')
+        const [ telefone, setTelefone ] = useState('')
+        const [ email, setEmail ] = useState('')
+        const [ endereco, setEndereco ] = useState('')
+        
 
         async function handleSubmit(e){
         
             e.preventDefault();
       
-            console.log(nome)
-            console.log(imagem)
-    
+        
             var formData = new FormData();
             // formData.append('id', id)
-            formData.append('nome', document.getElementById('nome').value)
-            formData.append('imagem', imagem)
-            formData.append('codigo', codigo)
-            formData.append('margemDeErro', margem)
-            formData.append('porcentagemDePerda', perda)
-            api.post('produto/criar/',formData)
+            formData.append('nome', nome)
+            formData.append('telefone', telefone)
+            formData.append('email', email)
+            formData.append('endereco', endereco)
+            api.post('cliente/criar/',formData)
             .then(response => {
                 console.log('RESPOSTA',response)
                 loadClientes()
@@ -291,20 +292,16 @@ export default function Cliente() {
                         <input type="text" className="form-input" id='nome' onChange={e=> setNome(e.target.value)}/>
                     </div>
                     <div className="form-campo">
-                        <label htmlFor="" className="form-label" >Imagem</label>
-                        <input type="file" className="form-input" id='imagem' onChange={e=> setImagem(e.target.files[0])}/>
+                        <label htmlFor="" className="form-label" >Telefone</label>
+                        <input type="text" className="form-input" id='telefone' onChange={e=> setTelefone(e.target.value)}/>
                     </div>                    
                     <div className="form-campo">
-                        <label htmlFor="" className="form-label" >Código</label>
-                        <input type="text" className="form-input" id='codigo' onChange={e=> setCodigo(e.target.value)}/>
+                        <label htmlFor="" className="form-label" >email</label>
+                        <input type="email" className="form-input" id='email' onChange={e=> setEmail(e.target.value)}/>
                     </div>
                     <div className="form-campo">
-                        <label htmlFor="" className="form-label" >Margem de Erro</label>
-                        <input type="text" className="form-input" id='margemDeErro' onChange={e=> setMargem(e.target.value)}/>
-                    </div>
-                    <div className="form-campo">
-                        <label htmlFor="" className="form-label" >% Perda</label>
-                        <input type="text" className="form-input" id='porcentagemDePerda' onChange={e=> setPerda(e.target.value)}/>
+                        <label htmlFor="" className="form-label" >Endereço</label>
+                        <input type="text" className="form-input" id='endereco' onChange={e=> setEndereco(e.target.value)}/>
                     </div>
                     <div>
                         <button type="submit" className="btn btn-confirma">Salvar</button>

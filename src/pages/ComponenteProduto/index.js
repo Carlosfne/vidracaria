@@ -25,6 +25,8 @@ const useStyles = makeStyles({
 export default function ComponenteProduto() {
 
     const [ componentes, setComponentes ] = useState([])
+    const [ produto, setProduto ] = useState([])
+    const [ componente, setComponente ] = useState([])
 
     function TemporaryDrawer(marca) {
         const id = marca.value
@@ -142,12 +144,12 @@ export default function ComponenteProduto() {
                         </div>
                     </div>
                     <div className="item-lista-acoes">
-                        <button type="" title="Adicionar Estoque">
+                        {/* <button type="" title="Adicionar Estoque">
                             <FontAwesomeIcon icon={faPlus} color="#a8ffe5" style={{marginRight: '2px'}}/>
                             <FontAwesomeIcon icon={faBox} color="#a8ffe5"/>
-                        </button>
-                        <DialogMotorista />
-                        <TemporaryDrawer />
+                        </button> */}
+                        <DialogMotorista value={item.id} />
+                        {/* <TemporaryDrawer /> */}
                     </div>
                 </div>
 
@@ -195,6 +197,7 @@ export default function ComponenteProduto() {
 
     function DialogMotorista(marca) {
         const id = marca.value;
+        console.log(marca)
         const [open, setOpen] = React.useState(false);
         const [ marcain , setMarcaIn ] = React.useState([]);
 
@@ -202,14 +205,20 @@ export default function ComponenteProduto() {
           setOpen(true);
           loadStep()
       };
-          async function loadStep(){
-              const response = await api.get(`/service/motorista/id?id=${id}`)
-              setMarcaIn(response.data[0])
-          }
+        async function loadStep(){
+            var formData = new FormData()
+            formData.append('id', id)
+            const response = await api.post(`/componenteporproduto/detalhe/`, formData)
+            setMarcaIn(response.data.componenteporroduto)
+        }
 
         async function DeleteMarca(){
-            api.delete(`/service/motorista/id?id=${id}`)
+            var formData = new FormData();
+            formData.append('id', id)
+            api.post(`/componenteporproduto/remover/`,formData)
             .then( response=> {
+                console.log(response.data)
+                loadComponentesProduto()
                 // toast.info(response.data[0])
                 // loadMotoristas()
             })
@@ -234,7 +243,7 @@ export default function ComponenteProduto() {
 
             >
               <div className='dialog-confirm'>
-                  <DialogTitle id="alert-dialog-title"> <p> Excluir Motorista? </p></DialogTitle>
+                  <DialogTitle id="alert-dialog-title"> <p>Excluir Componente?</p></DialogTitle>
                   <DialogContent>
                   <DialogContentText id="alert-dialog-description">
                       <h3>{marcain.nome}</h3>
@@ -255,27 +264,19 @@ export default function ComponenteProduto() {
     }
 
     function Formulario() {
-        const [ nome, setNome ] = useState('')
-        const [ imagem, setImagem ] = useState('')
-        const [ codigo, setCodigo ] = useState('')
-        const [ margem, setMargem ] = useState('')
-        const [ perda, setPerda ] = useState('')
+        // const [ produto, setProduto ] = useState('')
+    
 
         async function handleSubmit(e){
         
             e.preventDefault();
-      
-            console.log(nome)
-            console.log(imagem)
     
             var formData = new FormData();
             // formData.append('id', id)
-            formData.append('nome', document.getElementById('nome').value)
-            formData.append('imagem', imagem)
-            formData.append('codigo', codigo)
-            formData.append('margemDeErro', margem)
-            formData.append('porcentagemDePerda', perda)
-            api.post('produto/criar/',formData)
+            formData.append('idProduto', document.getElementById('produto').value)
+            formData.append('idComponente', document.getElementById('componente').value)
+            formData.append('quantidade', document.getElementById('quantidade').value)
+            api.post('componenteporproduto/criar/',formData)
             .then(response => {
                 console.log('RESPOSTA',response)
                 loadComponentesProduto()
@@ -284,28 +285,32 @@ export default function ComponenteProduto() {
         }
         return (
             <div className="form-cadastro">
-                <h2>Cadastrar Componente do Produto</h2>
+                <h2>Cadastrar Vidro por Produto</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="form-campo">
-                        <label htmlFor="" className="form-label" >Nome</label>
-                        <input type="text" className="form-input" id='nome' onChange={e=> setNome(e.target.value)}/>
+                        <label htmlFor="" className="form-label" >Produto</label>
+                        <select className="form-input select" id='produto' >
+                            {
+                                produto.map(produto=> (
+                                    <option key={produto.id} value={produto.id}>{produto.nome}</option>
+                                ))
+                            }
+                        </select>
                     </div>
                     <div className="form-campo">
-                        <label htmlFor="" className="form-label" >Imagem</label>
-                        <input type="file" className="form-input" id='imagem' onChange={e=> setImagem(e.target.files[0])}/>
+                        <label htmlFor="" className="form-label" >Componente</label>
+                        <select className="form-input select" id='componente' >
+                            {
+                                componente.map(componente => (
+                                    <option key={componente.id} value={componente.id} >{componente.nome}</option>
+                                ))
+                            }
+                        </select>
                     </div>                    
                     <div className="form-campo">
-                        <label htmlFor="" className="form-label" >Código</label>
-                        <input type="text" className="form-input" id='codigo' onChange={e=> setCodigo(e.target.value)}/>
-                    </div>
-                    <div className="form-campo">
-                        <label htmlFor="" className="form-label" >Margem de Erro</label>
-                        <input type="text" className="form-input" id='margemDeErro' onChange={e=> setMargem(e.target.value)}/>
-                    </div>
-                    <div className="form-campo">
-                        <label htmlFor="" className="form-label" >% Perda</label>
-                        <input type="text" className="form-input" id='porcentagemDePerda' onChange={e=> setPerda(e.target.value)}/>
-                    </div>
+                        <label htmlFor="" className="form-label" >Quantidade</label>
+                        <input type="text" className="form-input" id='quantidade' />
+                    </div>                    
                     <div>
                         <button type="submit" className="btn btn-confirma">Salvar</button>
                         {/* <button className="btn btn-limpar">Limpar</button> */}
@@ -320,12 +325,31 @@ export default function ComponenteProduto() {
         api.post('componenteporproduto/detalhe/')
         .then(response => {
             console.log(response.data)
-            setComponentes(response.data.componenteporproduto)
+            setComponentes(response.data.componenteporroduto)
         })
         .catch(error => console.log(error.response))
     }
+    function loadProduto(){
+        api.post('produto/detalhe/')
+        .then(response => {
+            console.log(response.data)
+            setProduto(response.data.produtos)
+        })
+        .catch(error => console.log(error.response))
+    }
+    function loadComponente(){
+        api.post('componente/detalhe/')
+        .then(response => {
+            console.log(response.data)
+            setComponente(response.data.componentes)
+        })
+        .catch(error => console.log(error.response))
+    }
+    
     useEffect(() => {
         loadComponentesProduto()
+        loadComponente()
+        loadProduto()
     }, [])
 
     return (

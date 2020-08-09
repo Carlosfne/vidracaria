@@ -25,6 +25,7 @@ const useStyles = makeStyles({
 export default function Vidro() {
 
     const [ produtos, setProdutos ] = useState([])
+    const [ estoques, setEstoque ] = useState([])
 
     function TemporaryDrawer(marca) {
         const id = marca.value
@@ -142,12 +143,12 @@ export default function Vidro() {
                         </div>
                     </div>
                     <div className="item-lista-acoes">
-                        <button type="" title="Adicionar Estoque">
+                        {/* <button type="" title="Adicionar Estoque">
                             <FontAwesomeIcon icon={faPlus} color="#a8ffe5" style={{marginRight: '2px'}}/>
                             <FontAwesomeIcon icon={faBox} color="#a8ffe5"/>
-                        </button>
-                        <DialogMotorista />
-                        <TemporaryDrawer />
+                        </button> */}
+                        <DialogMotorista  value={item.id} />
+                        {/* <TemporaryDrawer /> */}
                     </div>
                 </div>
 
@@ -203,15 +204,19 @@ export default function Vidro() {
           loadStep()
       };
           async function loadStep(){
-              const response = await api.get(`/service/motorista/id?id=${id}`)
-              setMarcaIn(response.data[0])
+            var formData = new FormData()
+            formData.append('id', id)
+            const response = await api.post(`/vidro/detalhe/`, formData)
+            setMarcaIn(response.data[0])
           }
 
         async function DeleteMarca(){
-            api.delete(`/service/motorista/id?id=${id}`)
+            var formData = new FormData()
+            formData.append('id', id)
+            api.post(`/vidro/remover/`, formData)
             .then( response=> {
                 // toast.info(response.data[0])
-                // loadMotoristas()
+                loadProdutos()
             })
             .catch(error=> console.log(error))
             setOpen(false);
@@ -234,10 +239,10 @@ export default function Vidro() {
 
             >
               <div className='dialog-confirm'>
-                  <DialogTitle id="alert-dialog-title"> <p> Excluir Motorista? </p></DialogTitle>
+                  <DialogTitle id="alert-dialog-title"> <p> Excluir Vidro? </p></DialogTitle>
                   <DialogContent>
                   <DialogContentText id="alert-dialog-description">
-                      <h3>{marcain.nome}</h3>
+                      {/* <h3>{marcain.nome}</h3> */}
                   </DialogContentText>
                   </DialogContent>
                   <div className='dialog-btns'>
@@ -255,27 +260,22 @@ export default function Vidro() {
     }
 
     function Formulario() {
-        const [ nome, setNome ] = useState('')
+        const [ estoque, setEstoque ] = useState('')
         const [ imagem, setImagem ] = useState('')
-        const [ codigo, setCodigo ] = useState('')
-        const [ margem, setMargem ] = useState('')
-        const [ perda, setPerda ] = useState('')
+        const [ preco, setPreco ] = useState('')
+        
 
         async function handleSubmit(e){
         
             e.preventDefault();
-      
-            console.log(nome)
-            console.log(imagem)
     
             var formData = new FormData();
             // formData.append('id', id)
-            formData.append('nome', document.getElementById('nome').value)
+            formData.append('idEstoque', document.getElementById('estoque').value)
             formData.append('imagem', imagem)
-            formData.append('codigo', codigo)
-            formData.append('margemDeErro', margem)
-            formData.append('porcentagemDePerda', perda)
-            api.post('produto/criar/',formData)
+            formData.append('precoPorMetroQuadrado', preco)
+            
+            api.post('vidro/criar/',formData)
             .then(response => {
                 console.log('RESPOSTA',response)
                 loadProdutos()
@@ -287,24 +287,22 @@ export default function Vidro() {
                 <h2>Cadastrar Vidro</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="form-campo">
-                        <label htmlFor="" className="form-label" >Nome</label>
-                        <input type="text" className="form-input" id='nome' onChange={e=> setNome(e.target.value)}/>
+                        <label htmlFor="" className="form-label" >Estoque</label>
+                        <select className="form-input select" id='estoque' onChange={e=> setEstoque(e.target.value)}>
+                            {
+                                estoques.map(estoque => (
+                                    <option key={estoque.id} value={estoque.id} > {estoque.descricao} </option>
+                                ))
+                            }
+                        </select>
                     </div>
                     <div className="form-campo">
                         <label htmlFor="" className="form-label" >Imagem</label>
                         <input type="file" className="form-input" id='imagem' onChange={e=> setImagem(e.target.files[0])}/>
                     </div>                    
                     <div className="form-campo">
-                        <label htmlFor="" className="form-label" >Código</label>
-                        <input type="text" className="form-input" id='codigo' onChange={e=> setCodigo(e.target.value)}/>
-                    </div>
-                    <div className="form-campo">
-                        <label htmlFor="" className="form-label" >Margem de Erro</label>
-                        <input type="text" className="form-input" id='margemDeErro' onChange={e=> setMargem(e.target.value)}/>
-                    </div>
-                    <div className="form-campo">
-                        <label htmlFor="" className="form-label" >% Perda</label>
-                        <input type="text" className="form-input" id='porcentagemDePerda' onChange={e=> setPerda(e.target.value)}/>
+                        <label htmlFor="" className="form-label" >Preõo por m²</label>
+                        <input type="text" className="form-input" id='preco' onChange={e=> setPreco(e.target.value)}/>
                     </div>
                     <div>
                         <button type="submit" className="btn btn-confirma">Salvar</button>
@@ -317,15 +315,24 @@ export default function Vidro() {
 
 
     function loadProdutos(){
-        api.post('produto/detalhe/')
+        api.post('vidro/detalhe/')
         .then(response => {
             console.log(response.data)
-            setProdutos(response.data.produtos)
+            setProdutos(response.data.vidro)
+        })
+        .catch(error => console.log(error.response))
+    }
+    function loadEstoque(){
+        api.post('estoque/detalhe/')
+        .then(response => {
+            console.log(response.data)
+            setEstoque(response.data.estoque)
         })
         .catch(error => console.log(error.response))
     }
     useEffect(() => {
         loadProdutos()
+        loadEstoque()
     }, [])
 
     return (
