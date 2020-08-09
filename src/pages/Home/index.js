@@ -4,13 +4,11 @@ import Cabecalho from '../../components/Cabecalho';
 import CardMenu from '../../components/CardMenu';
 import './style.css';
 
-import imagemBackground from '../../images/backgroundDolar.png';
-
 export default function Home() {
     return (
         <div 
             className="home"
-            style={{backgroundImage: `url(${imagemBackground})`, backgroundSize: 'contain'}}
+            // style={{backgroundImage: `url(${imagemBackground})`, backgroundSize: 'contain'}}
         >
             <Cabecalho />
             <div className="home-corpo">
