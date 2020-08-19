@@ -9,7 +9,8 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css'; 
 import './style.css';
 
 
@@ -71,11 +72,7 @@ export default function Regras() {
     
                 {
                     detalhes && 
-                    <div className="item-detalhes">
-                        <div className="campos">
-                            <strong>Descrição: </strong>
-                            <span>{subdetalhe.nome}</span>
-                        </div>
+                    <div className="item-detalhes">                        
                         <div className="campos">
                             <strong>Ajuste altura: </strong>
                             <span>{item.ajusteAltura}</span>
@@ -84,26 +81,11 @@ export default function Regras() {
                             <strong>Ajuste Comprimento: </strong>
                             <span>{item.ajusteComprimento}</span>
                         </div>
-                        <div className="campos">
-                            <strong>Estoque: </strong>
-                            <span>{item.estoque}</span>
-                        </div>
-                        <div className="campos">
-                            <strong>Valor de Compra: </strong>
-                            <span>{item.valorCompra}</span>
-                        </div>
-                        <div className="campos">
-                            <strong>Valor de Venda: </strong>
-                            <span>{item.precoPorMetroQuadrado} m²</span>
-                        </div>
-                        <div className="campos">
-                            <strong>Preço do Estoque: </strong>
-                            <span>{item.valorCompra * item.estoque}</span>
-                        </div>
-                        <div className="campos">
-                            {/* <strong>Preço do Estoque: </strong>
-                            <span>{item.valorCompra * item.estoque}</span> */}
-                        </div>
+                        {/* <div className="campos">
+                            <strong>Vidro: </strong>
+                            <span>{item.idVu}</span>
+                        </div>                      */}
+                        
                     </div>
                 }
             </div>
@@ -137,6 +119,7 @@ export default function Regras() {
             .then(response => {
                 console.log('RESPOSTA',response)
                 loadRegras()
+                toast.info(`Regra ${response.data.nome} salva com sucesso!`)  
             })
             .catch(error => console.log(error.response))
         }
@@ -197,7 +180,7 @@ export default function Regras() {
             .then( response=> {
                 console.log(response.data)
                 loadRegras()
-                // toast.info(response.data[0])
+                toast.error('Registro excluido com sucesso!')
                 // loadMotoristas()
             })
             .catch(error=> console.log(error))
@@ -283,6 +266,7 @@ export default function Regras() {
                         ))}
                     </div>
                 </div>
+                <ToastContainer /> 
             </div>
         </div>
     )

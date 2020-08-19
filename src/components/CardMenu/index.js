@@ -13,7 +13,7 @@ export default function CardMenu({ item }) {
             href={item.link}
         > 
             <div className="card-icone">
-                <FontAwesomeIcon icon={item.icone} size="8x"/>
+                <FontAwesomeIcon icon={item.icone} size="4x"/>
             </div>
             <div className="card-titulo">{item.titulo}</div>
             <p className="card-descricao">{item.descricao}</p>

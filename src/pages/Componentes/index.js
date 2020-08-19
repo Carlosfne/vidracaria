@@ -10,7 +10,8 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css'; 
 import './style.css';
 
 
@@ -108,7 +109,7 @@ export default function Componentes() {
             .then( response=> {
                 console.log(response.data)
                 loadProdutos()
-                // toast.info(response.data[0])
+                toast.error('Registro excluido com sucesso!')
                 // loadMotoristas()
             })
             .catch(error=> console.log(error))
@@ -171,6 +172,7 @@ export default function Componentes() {
             api.post('componente/criar/',formData)
             .then(response => {
                 console.log('RESPOSTA',response)
+                toast.info(`Componente ${response.data.nome} salvo com sucesso!`)   
                 loadProdutos()
             })
             .catch(error => console.log(error.response))
@@ -195,7 +197,7 @@ export default function Componentes() {
 
                     <div className="form-campo">
                         <label htmlFor="" className="form-label" >Estoque</label>
-                        <select className="form-input" id='estoque' onChange={e=> setEstoque(e.target.value)}> 
+                        <select className="form-input select" id='estoque' onChange={e=> setEstoque(e.target.value)}> 
                             {
                                 estoques.map(estoque => (
                                 <option value={estoque.id} >{estoque.descricao}</option>
@@ -236,7 +238,7 @@ export default function Componentes() {
     return (
         <div 
             className="home-produtos"
-            // style={{backgroundImage: `url(${imagemBackground})`, backgroundSize: 'contain'}}
+
         >
             <Cabecalho />
             <div className="home-produtos-corpo">
@@ -262,51 +264,8 @@ export default function Componentes() {
                         ))}
                     </div>
                 </div>
+            <ToastContainer /> 
             </div>
         </div>
     )
 }
-
-
-const PRODUTOS = [
-    {
-        id: 1,
-        nome: 'Biscoito Trakinas',
-        descricao: 'Biscoito recheado de 200gr',
-        categoria: 'Alimentos',
-        valorCompra: 1.50,
-        valorVenda: 2.99,
-        unidadeMedida: 'Unidades',
-        estoque: 50,
-    },
-    {
-        id: 2,
-        nome: 'Biscoito Piraquê',
-        descricao: 'Biscoito recheado de 200gr',
-        categoria: 'Alimentos',
-        valorCompra: 1.50,
-        valorVenda: 2.99,
-        unidadeMedida: 'Unidades',
-        estoque: 44,
-    },
-    {
-        id: 3,
-        nome: 'Biscoito Cheetos Requeijão',
-        descricao: 'Biscoito recheado de 200gr',
-        categoria: 'Alimentos',
-        valorCompra: 1.50,
-        valorVenda: 2.99,
-        unidadeMedida: 'Unidades',
-        estoque: 26,
-    },
-    {
-        id: 4,
-        nome: 'Biscoito Batata Ruffles',
-        descricao: 'Biscoito recheado de 200gr',
-        categoria: 'Alimentos',
-        valorCompra: 1.50,
-        valorVenda: 2.99,
-        unidadeMedida: 'Unidades',
-        estoque: 13,
-    },
-];

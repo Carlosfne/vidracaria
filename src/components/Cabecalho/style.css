@@ -4,6 +4,15 @@
     height: 80px;
     justify-content: space-between;
 }
+@media (max-width: 600px) 
+{
+    .cabecalho{
+        height: 50px;
+    }
+    .cabecalho div, .cabecalho a{
+        padding: 0px 10px;
+    }
+}
 
 .cabecalho div, .cabecalho a {
     flex: 1;    
@@ -44,4 +53,7 @@
 .link-cadastro:hover {
     color: #FFF;
     font-size: 1.6em;
+}
+.img-logout {
+    width: 50px;
 }

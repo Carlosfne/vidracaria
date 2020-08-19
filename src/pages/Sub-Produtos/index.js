@@ -6,7 +6,6 @@ import Lista from '../../components/Lista';
 import api from '../../services/api';
 
 
-import imagemBackground from '../../images/backgroundDolar.png';
 
 import './style.css';
 

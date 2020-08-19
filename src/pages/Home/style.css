@@ -4,7 +4,8 @@
 }
 
 .home-corpo { 
-    padding: 20px;
+    padding: 0px;
+    height: 500px;
     flex-wrap: wrap;
     justify-content: center;
 }

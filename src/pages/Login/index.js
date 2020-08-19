@@ -3,13 +3,15 @@ import { faCartArrowDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import api from '../../services/api';
 import { useHistory }from 'react-router-dom'
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css'; 
 import './style.css';
-import imagemBackground from '../../images/backgroundDolar.png';
 
 export default function Login() {
     const history = useHistory();
     const [ nome, setNome ] = useState('')
     const [ senha, setSenha ] = useState('')
+    const [ error, setError ] = useState('')
 
     async function handleLogin(e){
         e.preventDefault();
@@ -19,10 +21,18 @@ export default function Login() {
             formData.append('senha', senha)
         api.post('usuario/login/',formData)
         .then(response => {
-            console.log('RESPOSTA',response)
-            history.push('/home')
+            console.log('RESPOSTA',response.data.user.id)
+            var userId = response.data.user.id
+            toast.info('Login realizado com sucesso!')
+            localStorage.setItem('authenticated', userId)
+            setTimeout(() => {
+                history.push('/home')                
+            }, 2000);
         })
-        .catch(error => console.log(error.response))
+        .catch(error => {
+            console.log(error.response)
+            setError('Informações de Login erradas favor verificar')
+        })
       }
 
     return (
@@ -37,6 +47,7 @@ export default function Login() {
                     <span>VIDROCOM</span>
                 </div>
                 <form onSubmit={handleLogin}>
+                    { error ? <h4>{error}</h4> : ''}
                     <input 
                         type="text" 
                         className="form-input"

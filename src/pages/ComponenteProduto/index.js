@@ -11,8 +11,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Drawer from '@material-ui/core/Drawer';
-import imagemBackground from '../../images/backgroundDolar.png';
-
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css'; 
 import './style.css';
 
 const useStyles = makeStyles({
@@ -219,7 +219,7 @@ export default function ComponenteProduto() {
             .then( response=> {
                 console.log(response.data)
                 loadComponentesProduto()
-                // toast.info(response.data[0])
+                toast.error('Registro excluido com sucesso!')
                 // loadMotoristas()
             })
             .catch(error=> console.log(error))
@@ -264,9 +264,6 @@ export default function ComponenteProduto() {
     }
 
     function Formulario() {
-        // const [ produto, setProduto ] = useState('')
-    
-
         async function handleSubmit(e){
         
             e.preventDefault();
@@ -280,12 +277,13 @@ export default function ComponenteProduto() {
             .then(response => {
                 console.log('RESPOSTA',response)
                 loadComponentesProduto()
+                toast.info(`Componente do produto salvo com sucesso!`) 
             })
             .catch(error => console.log(error.response))
         }
         return (
             <div className="form-cadastro">
-                <h2>Cadastrar Vidro por Produto</h2>
+                <h2>Cadastrar Componente do Produto</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="form-campo">
                         <label htmlFor="" className="form-label" >Produto</label>
@@ -355,7 +353,6 @@ export default function ComponenteProduto() {
     return (
         <div 
             className="home-produtos"
-            // style={{backgroundImage: `url(${imagemBackground})`, backgroundSize: 'contain'}}
         >
             <Cabecalho />
             <div className="home-produtos-corpo">
@@ -375,51 +372,8 @@ export default function ComponenteProduto() {
                         ))}
                     </div>
                 </div>
+                <ToastContainer /> 
             </div>
         </div>
     )
 }
-
-
-const PRODUTOS = [
-    {
-        id: 1,
-        nome: 'Biscoito Trakinas',
-        descricao: 'Biscoito recheado de 200gr',
-        categoria: 'Alimentos',
-        valorCompra: 1.50,
-        valorVenda: 2.99,
-        unidadeMedida: 'Unidades',
-        estoque: 50,
-    },
-    {
-        id: 2,
-        nome: 'Biscoito Piraquê',
-        descricao: 'Biscoito recheado de 200gr',
-        categoria: 'Alimentos',
-        valorCompra: 1.50,
-        valorVenda: 2.99,
-        unidadeMedida: 'Unidades',
-        estoque: 44,
-    },
-    {
-        id: 3,
-        nome: 'Biscoito Cheetos Requeijão',
-        descricao: 'Biscoito recheado de 200gr',
-        categoria: 'Alimentos',
-        valorCompra: 1.50,
-        valorVenda: 2.99,
-        unidadeMedida: 'Unidades',
-        estoque: 26,
-    },
-    {
-        id: 4,
-        nome: 'Biscoito Batata Ruffles',
-        descricao: 'Biscoito recheado de 200gr',
-        categoria: 'Alimentos',
-        valorCompra: 1.50,
-        valorVenda: 2.99,
-        unidadeMedida: 'Unidades',
-        estoque: 13,
-    },
-];

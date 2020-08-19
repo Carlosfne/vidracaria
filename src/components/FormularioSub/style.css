@@ -51,7 +51,7 @@
 
 .form-input {
     border-radius: 2px;
-    border: 2px solid #45424e;
+    /* border: 2px solid #45424e; */
     background: #f8f8f8;
     padding: 15px;
     margin-top: 5px;

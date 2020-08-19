@@ -11,8 +11,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Drawer from '@material-ui/core/Drawer';
-import imagemBackground from '../../images/backgroundDolar.png';
-
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css'; 
 import './style.css';
 
 const useStyles = makeStyles({
@@ -156,37 +156,17 @@ export default function Vidro() {
                     detalhes && 
                     <div className="item-detalhes">
                         <div className="campos">
-                            <strong>Descrição: </strong>
+                            <strong>Nome: </strong>
                             <span>{item.nome}</span>
                         </div>
                         <div className="campos">
-                            <strong>Categoria: </strong>
-                            <span>{item.categoria}</span>
+                            <strong>Imagem: </strong>
+                            <span>{item.imagem}</span>
                         </div>
                         <div className="campos">
-                            <strong>Unidade de Medida: </strong>
-                            <span>{item.unidadeMedida}</span>
-                        </div>
-                        <div className="campos">
-                            <strong>Estoque: </strong>
-                            <span>{item.estoque}</span>
-                        </div>
-                        <div className="campos">
-                            <strong>Valor de Compra: </strong>
-                            <span>{item.valorCompra}</span>
-                        </div>
-                        <div className="campos">
-                            <strong>Valor de Venda: </strong>
-                            <span>{item.precoPorMetroQuadrado} m²</span>
-                        </div>
-                        <div className="campos">
-                            <strong>Preço do Estoque: </strong>
-                            <span>{item.valorCompra * item.estoque}</span>
-                        </div>
-                        <div className="campos">
-                            {/* <strong>Preço do Estoque: </strong>
-                            <span>{item.valorCompra * item.estoque}</span> */}
-                        </div>
+                            <strong>Preço por m²: </strong>
+                            <span>{item.precoPorMetroQuadrado}</span>
+                        </div>                        
                     </div>
                 }
             </div>
@@ -215,7 +195,7 @@ export default function Vidro() {
             formData.append('id', id)
             api.post(`/vidro/remover/`, formData)
             .then( response=> {
-                // toast.info(response.data[0])
+                toast.error('Registro excluido com sucesso!')
                 loadProdutos()
             })
             .catch(error=> console.log(error))
@@ -279,6 +259,7 @@ export default function Vidro() {
             .then(response => {
                 console.log('RESPOSTA',response)
                 loadProdutos()
+                toast.info(`Produto ${response.data.nome} salvo com sucesso!`)  
             })
             .catch(error => console.log(error.response))
         }
@@ -301,7 +282,7 @@ export default function Vidro() {
                         <input type="file" className="form-input" id='imagem' onChange={e=> setImagem(e.target.files[0])}/>
                     </div>                    
                     <div className="form-campo">
-                        <label htmlFor="" className="form-label" >Preõo por m²</label>
+                        <label htmlFor="" className="form-label" >Preço por m²</label>
                         <input type="text" className="form-input" id='preco' onChange={e=> setPreco(e.target.value)}/>
                     </div>
                     <div>
@@ -358,51 +339,8 @@ export default function Vidro() {
                         ))}
                     </div>
                 </div>
+                <ToastContainer /> 
             </div>
         </div>
     )
 }
-
-
-const PRODUTOS = [
-    {
-        id: 1,
-        nome: 'Biscoito Trakinas',
-        descricao: 'Biscoito recheado de 200gr',
-        categoria: 'Alimentos',
-        valorCompra: 1.50,
-        valorVenda: 2.99,
-        unidadeMedida: 'Unidades',
-        estoque: 50,
-    },
-    {
-        id: 2,
-        nome: 'Biscoito Piraquê',
-        descricao: 'Biscoito recheado de 200gr',
-        categoria: 'Alimentos',
-        valorCompra: 1.50,
-        valorVenda: 2.99,
-        unidadeMedida: 'Unidades',
-        estoque: 44,
-    },
-    {
-        id: 3,
-        nome: 'Biscoito Cheetos Requeijão',
-        descricao: 'Biscoito recheado de 200gr',
-        categoria: 'Alimentos',
-        valorCompra: 1.50,
-        valorVenda: 2.99,
-        unidadeMedida: 'Unidades',
-        estoque: 26,
-    },
-    {
-        id: 4,
-        nome: 'Biscoito Batata Ruffles',
-        descricao: 'Biscoito recheado de 200gr',
-        categoria: 'Alimentos',
-        valorCompra: 1.50,
-        valorVenda: 2.99,
-        unidadeMedida: 'Unidades',
-        estoque: 13,
-    },
-];

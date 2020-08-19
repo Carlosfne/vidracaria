@@ -11,7 +11,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Drawer from '@material-ui/core/Drawer';
-import imagemBackground from '../../images/backgroundDolar.png';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css'; 
 
 import './style.css';
 
@@ -136,7 +137,7 @@ export default function Projeto() {
                     <div className="item-lista-id">{item.id}</div>
                     <div className="item-lista-dados-principais">
                         <div className="nome">
-                            {item.nome}
+                            {item.id}
                         </div>
                         <div className="quantidade">
                             <img src={item.imagem} alt=""/>
@@ -157,37 +158,21 @@ export default function Projeto() {
                     detalhes && 
                     <div className="item-detalhes">
                         <div className="campos">
-                            <strong>Descrição: </strong>
-                            <span>{item.nome}</span>
+                            <strong>ID: </strong>
+                            <span>{item.id}</span>
                         </div>
                         <div className="campos">
-                            <strong>Categoria: </strong>
-                            <span>{item.categoria}</span>
+                            <strong>Comprimento vão: </strong>
+                            <span>{item.comprimentoVao}</span>
                         </div>
                         <div className="campos">
-                            <strong>Unidade de Medida: </strong>
-                            <span>{item.unidadeMedida}</span>
+                            <strong>Altura vão: </strong>
+                            <span>{item.alturaVao}</span>
                         </div>
                         <div className="campos">
-                            <strong>Estoque: </strong>
-                            <span>{item.estoque}</span>
-                        </div>
-                        <div className="campos">
-                            <strong>Valor de Compra: </strong>
-                            <span>{item.valorCompra}</span>
-                        </div>
-                        <div className="campos">
-                            <strong>Valor de Venda: </strong>
-                            <span>{item.precoPorMetroQuadrado} m²</span>
-                        </div>
-                        <div className="campos">
-                            <strong>Preço do Estoque: </strong>
-                            <span>{item.valorCompra * item.estoque}</span>
-                        </div>
-                        <div className="campos">
-                            {/* <strong>Preço do Estoque: </strong>
-                            <span>{item.valorCompra * item.estoque}</span> */}
-                        </div>
+                            <strong>Largura vão: </strong>
+                            <span>{item.larguraVao}</span>
+                        </div>                        
                     </div>
                 }
             </div>
@@ -216,7 +201,7 @@ export default function Projeto() {
             formData.append('id', id)
             api.post(`/projetos/remover/`, formData)
             .then( response=> {
-                // toast.info(response.data[0])
+                toast.error('Registro excluido com sucesso!')
                 loadProdutos()
             })
             .catch(error=> console.log(error))
@@ -282,6 +267,7 @@ export default function Projeto() {
             .then(response => {
                 console.log('RESPOSTA',response)
                 loadProdutos()
+                toast.info(`Projeto salvo com sucesso!`) 
             })
             .catch(error => console.log(error.response))
         }
@@ -389,6 +375,7 @@ export default function Projeto() {
                         ))}
                     </div>
                 </div>
+                <ToastContainer /> 
             </div>
         </div>
     )

@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom'
 import { faCartArrowDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import power from '../../images/power.png'
 
 import './style.css';
 
@@ -15,9 +16,16 @@ export default function Cabecalho() {
                 {/* <FontAwesomeIcon icon={faCartArrowDown} size="2x"/> */}
                 <span>Vidraçaria</span>
             </a>
-            <div className="notificacoes"></div>
+            <div className="notificacoes">
+                <span>Seja Bem Vindo! Escolha uma das opções abaixo</span>
+            </div>
             <div className="config-usuario">            
-                <Link className='link-cadastro' to='/cadastro'>Cadastros</Link>
+                <Link to='/' onClick={() => {
+                    localStorage.removeItem('authenticated')
+                    }}
+                >
+                    <img className='img-logout' src={power} alt='power'></img>
+                </Link>
             </div>
         </div>
     )

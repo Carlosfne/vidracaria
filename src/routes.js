@@ -15,7 +15,7 @@ import ComponenteProduto from './pages/ComponenteProduto';
 import Estoque from './pages/Estoque';
 import Cliente from './pages/Cliente';
 import Vidro from './pages/Vidro';
-import Projeto from './pages/Projeto';
+import Projeto from './pages/Projeto'; 
 
 export default function Rotas() {
     return (

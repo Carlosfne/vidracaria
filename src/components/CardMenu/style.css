@@ -1,16 +1,17 @@
 .card-menu {
-    display: flex;
-    flex-direction: column;
+    display:grid;
+    grid-template-columns: 150px 150px 150px;
     background: #0000ff;
     text-decoration: none;
     color: #FFFf00;
     flex: 1;
-    height: 95%;
+    width: 480px;
+    height: 50%;
     /* min-width: 300px; */
-    max-width: 480px;
+    /* max-width: 480px; */
     margin: 5px 10px;
-    border-radius: 5px;
-    padding: 20px;
+    border-radius: 15px;
+    padding: 10px;
     justify-content: space-evenly;
     align-content: center;
     align-items: center;
@@ -25,8 +26,8 @@
 
 .card-menu .card-titulo {
     flex: 2;
-    margin-top: 50px;
-    font-size: 60px;
+    margin-top: 20px;
+    font-size: 30px;
     font-weight: bold;
     color: #ffff00;
     text-shadow:  4px 4px #222;

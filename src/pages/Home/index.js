@@ -1,5 +1,5 @@
 import React from 'react';
-import { faBoxes, faBook, faCashRegister } from '@fortawesome/free-solid-svg-icons';
+import { faBoxes, faBook, faCashRegister, faBezierCurve, faHandSparkles, faUser, faUsers, faGlasses, faWineGlass, faGlassCheers, faHourglassEnd, faAddressCard, faGlobeAmericas } from '@fortawesome/free-solid-svg-icons';
 import Cabecalho from '../../components/Cabecalho';
 import CardMenu from '../../components/CardMenu';
 import './style.css';
@@ -20,21 +20,75 @@ export default function Home() {
 
 const ItensMenu = [
     {
-        link: '/produtos',
-        titulo: 'Produtos',
-        icone: faBoxes,
-        descricao: 'Cadastro e Edição de Produtos, incluindo Gestão de Estoques'
-    },
-    {
         link: '/vendas',
         titulo: 'Vendas',
         icone: faCashRegister,
-        descricao: 'Registrar as vendas realizadas no dia. '
+        descricao: 'Tela de Vendas. '
     },
     {
         link: '/relatorios',
         titulo: 'Relatórios',
         icone: faBook,
-        descricao: 'Visualizar Relatórios de Venda por Períodos, Clientes ou Produtos',
+        descricao: 'Visualizar Relatórios.',
+    },
+    {
+        link: '/produtos',
+        titulo: 'Produtos',
+        icone: faBoxes,
+        descricao: 'Cadastro e Edição de Produtos.'
+    },
+    {
+        link: '/componentes',
+        titulo: 'Componentes',
+        icone: faBezierCurve,
+        descricao: 'Cadastro de Componentes.',
+    },
+    {
+        link: '/regras',
+        titulo: 'Regras',
+        icone: faHandSparkles,
+        descricao: 'Cadastro de regras.',
+    },
+    {
+        link: '/usuarios',
+        titulo: 'Usuários',
+        icone: faUsers,
+        descricao: 'Cadastro de Usuários.',
+    },
+    {
+        link: '/vidroproduto',
+        titulo: 'Vidro por Produto',
+        icone: faBoxes,
+        descricao: 'Cadastro de Vidro por Produto.',
+    },
+    {
+        link: '/componenteproduto',
+        titulo: 'Componentes por Produto',
+        icone: faBoxes,
+        descricao: 'Cadastro de Componente por Produto.',
+    },
+    {
+        link: '/estoque',
+        titulo: 'Estoque',
+        icone: faBoxes,
+        descricao: 'Cadastro de Estoque.',
+    },
+    {
+        link: '/cliente',
+        titulo: 'Cliente',
+        icone: faBoxes,
+        descricao: 'Cadastro de Clientes.',
+    },
+    {
+        link: '/vidro',
+        titulo: 'Vidro',
+        icone: faBoxes,
+        descricao: 'Cadastro de Vidros.',
+    },
+    {
+        link: '/projeto',
+        titulo: 'Projeto',
+        icone: faBoxes,
+        descricao: 'Cadastro de Projetos.',
     },
 ]

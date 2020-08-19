@@ -11,7 +11,8 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css'; 
 
 import './style.css';
 
@@ -86,7 +87,7 @@ export default function Usuarios() {
             .then( response=> {
                 console.log(response.data)
                 loadProdutos()
-                // toast.info(response.data[0])
+                toast.error('Registro excluido com sucesso!')
                 // loadMotoristas()
             })
             .catch(error=> console.log(error))
@@ -148,6 +149,7 @@ export default function Usuarios() {
             .then(response => {
                 console.log('RESPOSTA',response)
                 loadProdutos()
+                toast.info(`Usuário ${response.data.user.nome} salvo com sucesso!`)  
             })
             .catch(error => console.log(error.response))
         }
@@ -209,6 +211,7 @@ export default function Usuarios() {
                         ))}
                     </div>
                 </div>
+                <ToastContainer /> 
             </div>
         </div>
     )

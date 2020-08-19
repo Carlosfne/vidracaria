@@ -12,7 +12,10 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Drawer from '@material-ui/core/Drawer';
 import Modal from '@material-ui/core/Modal';
-import imagemBackground from '../../images/backgroundDolar.png';
+
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css'; 
+
 
 import './style.css';
 
@@ -44,11 +47,11 @@ const useStyles = makeStyles(theme => ({
       transform: `translate(-${top}%, -${left}%)`,
     };
   }
+  
 
 export default function Produtos() {
-
     const [ produtos, setProdutos ] = useState([])
-
+    const handleClick = () => toast.success('Mensagem de sucesso')
     function SimpleModal() {
         const classes = useStyles();
         // getModalStyle is not a pure function, we roll the style only on the first render
@@ -357,7 +360,7 @@ export default function Produtos() {
             .then( response=> {
                 console.log(response.data)
                 loadProdutos()
-                // toast.info(response.data[0])
+                toast.error('Registro excluido com sucesso!')
                 // loadMotoristas()
             })
             .catch(error=> console.log(error))
@@ -424,7 +427,8 @@ export default function Produtos() {
             formData.append('porcentagemDePerda', perda)
             api.post('produto/criar/',formData)
             .then(response => {
-                console.log('RESPOSTA',response)
+                console.log('RESPOSTA',response) 
+                toast.info(`Produto ${response.data.nome} salvo com sucesso!`)               
                 loadProdutos()
             })
             .catch(error => console.log(error.response))
@@ -467,7 +471,8 @@ export default function Produtos() {
         api.post('produto/detalhe/')
         .then(response => {
             console.log(response.data)
-            setProdutos(response.data.produtos)
+            console.log(toast)            
+            setProdutos(response.data.produtos)                         
         })
         .catch(error => console.log(error.response))
     }
@@ -495,54 +500,13 @@ export default function Produtos() {
                     <div className="corpo-lista">
                         {produtos.map((item, indice) => (
                             <ItemLista item={item} key={indice}/>
-                        ))}
+                            ))}
                     </div>
                 </div>
+            </div>
+            <div className='invisivel'>
+                <ToastContainer /> 
             </div>
         </div>
     )
 }
-
-
-const PRODUTOS = [
-    {
-        id: 1,
-        nome: 'Biscoito Trakinas',
-        descricao: 'Biscoito recheado de 200gr',
-        categoria: 'Alimentos',
-        valorCompra: 1.50,
-        valorVenda: 2.99,
-        unidadeMedida: 'Unidades',
-        estoque: 50,
-    },
-    {
-        id: 2,
-        nome: 'Biscoito Piraquê',
-        descricao: 'Biscoito recheado de 200gr',
-        categoria: 'Alimentos',
-        valorCompra: 1.50,
-        valorVenda: 2.99,
-        unidadeMedida: 'Unidades',
-        estoque: 44,
-    },
-    {
-        id: 3,
-        nome: 'Biscoito Cheetos Requeijão',
-        descricao: 'Biscoito recheado de 200gr',
-        categoria: 'Alimentos',
-        valorCompra: 1.50,
-        valorVenda: 2.99,
-        unidadeMedida: 'Unidades',
-        estoque: 26,
-    },
-    {
-        id: 4,
-        nome: 'Biscoito Batata Ruffles',
-        descricao: 'Biscoito recheado de 200gr',
-        categoria: 'Alimentos',
-        valorCompra: 1.50,
-        valorVenda: 2.99,
-        unidadeMedida: 'Unidades',
-        estoque: 13,
-    },
-];

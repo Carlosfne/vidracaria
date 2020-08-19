@@ -11,8 +11,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Drawer from '@material-ui/core/Drawer';
-import imagemBackground from '../../images/backgroundDolar.png';
-
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css'; 
 import './style.css';
 
 const useStyles = makeStyles({
@@ -134,7 +134,7 @@ export default function Estoque() {
                     <div className="item-lista-id">{item.id}</div>
                     <div className="item-lista-dados-principais">
                         <div className="nome">
-                            {item.nome}
+                            {item.descricao}
                         </div>
                         <div className="quantidade">
                             <img src={item.imagem} alt=""/>
@@ -156,11 +156,11 @@ export default function Estoque() {
                     <div className="item-detalhes">
                         <div className="campos">
                             <strong>Descrição: </strong>
-                            <span>{item.nome}</span>
+                            <span>{item.descricao}</span>
                         </div>
                         <div className="campos">
-                            <strong>Categoria: </strong>
-                            <span>{item.categoria}</span>
+                            <strong>Quantidade: </strong>
+                            <span>{item.quantidade}</span>
                         </div>
                         <div className="campos">
                             <strong>Unidade de Medida: </strong>
@@ -215,7 +215,7 @@ export default function Estoque() {
             formData.append('id', id)
             api.post(`/estoque/remover/`, formData)
             .then( response=> {
-                // toast.info(response.data[0])
+                toast.error('Registro excluido com sucesso!')
                 loadEstoque()
             })
             .catch(error=> console.log(error))
@@ -292,6 +292,7 @@ export default function Estoque() {
             .then(response => {
                 console.log('RESPOSTA',response)
                 loadEstoque()
+                toast.info(`Estoque ${response.data.descricao} salvo com sucesso!`)   
             })
             .catch(error => console.log(error.response))
         }
@@ -317,11 +318,16 @@ export default function Estoque() {
                     </div>                    
                     <div className="form-campo">
                         <label htmlFor="" className="form-label" >Unidade Medida</label>
-                        <input type="text" className="form-input" id='unidadeMedida' onChange={e=> setUnidadeMedida(e.target.value)} />
+                        <select className="form-input select" id='unidadeMedida' onChange={e=> setUnidadeMedida(e.target.value)} >
+                            <option value='m'>Metros</option>
+                            <option value='pç'>PÇ</option>
+                            <option value='cm'>CM</option>
+                            <option value='mm'>mm</option>
+                        </select>
                     </div>                    
                     <div className="form-campo">
                         <label htmlFor="" className="form-label" >Validade</label>
-                        <input type="text" className="form-input" id='validade' onChange={e=> setValidade(e.target.value)} />
+                        <input type="date" className="form-input" id='validade' onChange={e=> setValidade(e.target.value)} />
                     </div>                    
                     <div className="form-campo">
                         <label htmlFor="" className="form-label" >Número de Série</label>
@@ -364,7 +370,6 @@ export default function Estoque() {
     return (
         <div 
             className="home-produtos"
-            // style={{backgroundImage: `url(${imagemBackground})`, backgroundSize: 'contain'}}
         >
             <Cabecalho />
             <div className="home-produtos-corpo">
@@ -384,51 +389,8 @@ export default function Estoque() {
                         ))}
                     </div>
                 </div>
+                <ToastContainer /> 
             </div>
         </div>
     )
 }
-
-
-const PRODUTOS = [
-    {
-        id: 1,
-        nome: 'Biscoito Trakinas',
-        descricao: 'Biscoito recheado de 200gr',
-        categoria: 'Alimentos',
-        valorCompra: 1.50,
-        valorVenda: 2.99,
-        unidadeMedida: 'Unidades',
-        estoque: 50,
-    },
-    {
-        id: 2,
-        nome: 'Biscoito Piraquê',
-        descricao: 'Biscoito recheado de 200gr',
-        categoria: 'Alimentos',
-        valorCompra: 1.50,
-        valorVenda: 2.99,
-        unidadeMedida: 'Unidades',
-        estoque: 44,
-    },
-    {
-        id: 3,
-        nome: 'Biscoito Cheetos Requeijão',
-        descricao: 'Biscoito recheado de 200gr',
-        categoria: 'Alimentos',
-        valorCompra: 1.50,
-        valorVenda: 2.99,
-        unidadeMedida: 'Unidades',
-        estoque: 26,
-    },
-    {
-        id: 4,
-        nome: 'Biscoito Batata Ruffles',
-        descricao: 'Biscoito recheado de 200gr',
-        categoria: 'Alimentos',
-        valorCompra: 1.50,
-        valorVenda: 2.99,
-        unidadeMedida: 'Unidades',
-        estoque: 13,
-    },
-];

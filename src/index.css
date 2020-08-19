@@ -37,3 +37,19 @@ div {
 ::-webkit-scrollbar-thumb:hover {
 	background: darken(#000, 10%);
 }
+.Toastify__toast--success{
+	height:50px;
+}
+.Toastify__toast--warning{
+	height:50px;
+}
+.Toastify__toast--info{
+	height:50px;
+}
+.Toastify__toast--error{
+	height:50px;
+}
+/* toast.warn('Produto salvo com sucesso!')           
+st.success('Produto salvo com sucesso!')           
+st.error('Produto salvo com sucesso!')           
+toast.info('Produto salvo com sucesso!')  */
