@@ -14,31 +14,22 @@ export default function Cadastros() {
               {/* <Link to='/produtos' > Cadastro de Produtos </Link> */}
               {/* <Link to='/sub-produtos' > Cadastro de Sub-produtos </Link> */}
               <div className='botao-menus'>
-                <Link to='/componentes' > Cadastro de Componentes </Link>
+                <Link to='/produtos' > Cadastro de Produtos </Link>
               </div>
-              <div className='botao-menus'>
-                <Link to='/regras' > Cadastro de Regras </Link>
-              </div>
-              <div className='botao-menus'>
-                <Link to='/usuarios' > Cadastro de Usuários </Link>
-              </div>
-              <div className='botao-menus'>
-                <Link to='/vidroproduto' > Cadastro de Vidros por produto</Link>
-              </div>
-              <div className='botao-menus'>
-                <Link to='/componenteproduto' > Cadastro de Componente por produto </Link>
-              </div>
-              <div className='botao-menus'>
+              {/* <div className='botao-menus'>
                 <Link to='/estoque' > Cadastro de Estoque </Link>
+              </div> */}
+              <div className='botao-menus'>
+                <Link to='/vidro' > Cadastro de Vidro </Link>
               </div>
               <div className='botao-menus'>
                 <Link to='/cliente' > Cadastro de Cliente </Link>
               </div>
               <div className='botao-menus'>
-                <Link to='/vidro' > Cadastro de Vidro </Link>
+                <Link to='/projeto' > Cadastro de Projeto </Link>
               </div>
               <div className='botao-menus'>
-                <Link to='/projeto' > Cadastro de Projeto </Link>
+                <Link to='/usuarios' > Cadastro de Usuários do sistema</Link>
               </div>
               
             </div>

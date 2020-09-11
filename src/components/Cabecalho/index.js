@@ -17,7 +17,7 @@ export default function Cabecalho() {
                 <span>Vidraçaria</span>
             </a>
             <div className="notificacoes">
-                <span>Seja Bem Vindo! Escolha uma das opções abaixo</span>
+                <span>Seja Bem Vindo!</span>
             </div>
             <div className="config-usuario">            
                 <Link to='/' onClick={() => {

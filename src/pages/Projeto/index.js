@@ -299,10 +299,10 @@ export default function Projeto() {
                             }
                         </select>
                     </div>                    
-                    <div className="form-campo">
+                    {/* <div className="form-campo">
                         <label htmlFor="" className="form-label" >Comprimento Vão</label>
                         <input type="text" className="form-input" id='comprimento' onChange={e=> setComprimento(e.target.value)}/>
-                    </div>
+                    </div> */}
                     <div className="form-campo">
                         <label htmlFor="" className="form-label" >Altura Vão</label>
                         <input type="text" className="form-input" id='altura' onChange={e=> setAltura(e.target.value)}/>

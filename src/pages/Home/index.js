@@ -32,63 +32,10 @@ const ItensMenu = [
         descricao: 'Visualizar Relatórios.',
     },
     {
-        link: '/produtos',
-        titulo: 'Produtos',
+        link: '/cadastro',
+        titulo: 'Cadastros',
         icone: faBoxes,
-        descricao: 'Cadastro e Edição de Produtos.'
+        descricao: 'Cadastro e Edição.'
     },
-    {
-        link: '/componentes',
-        titulo: 'Componentes',
-        icone: faBezierCurve,
-        descricao: 'Cadastro de Componentes.',
-    },
-    {
-        link: '/regras',
-        titulo: 'Regras',
-        icone: faHandSparkles,
-        descricao: 'Cadastro de regras.',
-    },
-    {
-        link: '/usuarios',
-        titulo: 'Usuários',
-        icone: faUsers,
-        descricao: 'Cadastro de Usuários.',
-    },
-    {
-        link: '/vidroproduto',
-        titulo: 'Vidro por Produto',
-        icone: faBoxes,
-        descricao: 'Cadastro de Vidro por Produto.',
-    },
-    {
-        link: '/componenteproduto',
-        titulo: 'Componentes por Produto',
-        icone: faBoxes,
-        descricao: 'Cadastro de Componente por Produto.',
-    },
-    {
-        link: '/estoque',
-        titulo: 'Estoque',
-        icone: faBoxes,
-        descricao: 'Cadastro de Estoque.',
-    },
-    {
-        link: '/cliente',
-        titulo: 'Cliente',
-        icone: faBoxes,
-        descricao: 'Cadastro de Clientes.',
-    },
-    {
-        link: '/vidro',
-        titulo: 'Vidro',
-        icone: faBoxes,
-        descricao: 'Cadastro de Vidros.',
-    },
-    {
-        link: '/projeto',
-        titulo: 'Projeto',
-        icone: faBoxes,
-        descricao: 'Cadastro de Projetos.',
-    },
+    
 ]

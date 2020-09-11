@@ -410,6 +410,7 @@ export default function Produtos() {
         const [ codigo, setCodigo ] = useState('')
         const [ margem, setMargem ] = useState('')
         const [ perda, setPerda ] = useState('')
+        const [ recuo, setRecuo ] = useState('')
 
         async function handleSubmit(e){
         
@@ -437,6 +438,23 @@ export default function Produtos() {
             <div className="form-cadastro">
                 <h2>Cadastrar Produto</h2>
                 <form onSubmit={handleSubmit}>
+                    <div className="form-campo">
+                        <label htmlFor="" className="form-label" >Nome</label>
+                        <input type="text" className="form-input" id='nome' onChange={e=> setNome(e.target.value)}/>
+                    </div>
+                    <div className="form-campo">
+                        <label htmlFor="" className="form-label" >Imagem</label>
+                        <input type="file" className="form-input" id='imagem' onChange={e=> setImagem(e.target.files[0])}/>
+                    </div>
+
+                    <div className="form-campo">
+                        <label htmlFor="" className="form-label" >Recuo</label>
+                        <input type="text" className="form-input" id='recuo' onChange={e=> setRecuo(e.target.value)}/>
+                    </div>                
+                    <div className="form-campo">
+                        <label htmlFor="" className="form-label" >Quantidade</label>
+                        <input type="text" className="form-input" id='quantidade' />
+                    </div>  
                     <div className="form-campo">
                         <label htmlFor="" className="form-label" >Nome</label>
                         <input type="text" className="form-input" id='nome' onChange={e=> setNome(e.target.value)}/>

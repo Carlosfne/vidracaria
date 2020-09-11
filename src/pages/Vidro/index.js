@@ -243,7 +243,18 @@ export default function Vidro() {
         const [ estoque, setEstoque ] = useState('')
         const [ imagem, setImagem ] = useState('')
         const [ preco, setPreco ] = useState('')
-        
+        const [ ajusteAltura, setAjusteAltura ] = useState('')
+        const [ ajusteComprimento, setAjusteComprimento ] = useState('')
+        const [ descricao, setDescricao ] = useState('')
+        const [ quantidade, setQuantidade ] = useState('')
+        const [ quantidadeMinima, setQuantidadeMinima ] = useState('')
+        const [ quantidadeMaxima, setQuantidadeMaxima ] = useState('')
+        const [ unidadeMedida, setUnidadeMedida ] = useState('')
+        const [ validade, setValidade ] = useState('')
+        const [ numeroSerie, setNumeroSerie ] = useState('')
+        const [ lote, setLote ] = useState('')
+        const [ custo, setCusto ] = useState('')
+        const [ fornecedor, setFornecedor ] = useState('')
 
         async function handleSubmit(e){
         
@@ -258,6 +269,15 @@ export default function Vidro() {
             api.post('vidro/criar/',formData)
             .then(response => {
                 console.log('RESPOSTA',response)
+                var formData = new FormData();
+                formData.append('idVidro', response.data.id)
+                formData.append('ajusteAltura', ajusteAltura)
+                formData.append('ajusteComprimento', ajusteComprimento)
+                api.post('regra/criar/')
+                .then(response => {
+                    console.log(response.data)
+                })
+                .catch(error => console.log(error.response))
                 loadProdutos()
                 toast.info(`Produto ${response.data.nome} salvo com sucesso!`)  
             })
@@ -268,6 +288,51 @@ export default function Vidro() {
                 <h2>Cadastrar Vidro</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="form-campo">
+                        <label htmlFor="" className="form-label" >Descricao</label>
+                        <input type="text" className="form-input" id='descricao' onChange={e=> setDescricao(e.target.value)} />
+                    </div>
+                    <div className="form-campo">
+                        <label htmlFor="" className="form-label" >Quantidade</label>
+                        <input type="text" className="form-input" id='quantidade' onChange={e=> setQuantidade(e.target.value)} />
+                    </div>                    
+                    <div className="form-campo">
+                        <label htmlFor="" className="form-label" >Quantidade Mínima</label>
+                        <input type="text" className="form-input" id='quantidadeMinima' onChange={e=> setQuantidadeMinima(e.target.value)} />
+                    </div>                    
+                    {/* <div className="form-campo">
+                        <label htmlFor="" className="form-label" >Quantidade Máxima</label>
+                        <input type="text" className="form-input" id='quantidadeMaxima' onChange={e=> setQuantidadeMaxima(e.target.value)} />
+                    </div>                     */}
+                    {/* <div className="form-campo">
+                        <label htmlFor="" className="form-label" >Unidade Medida</label>
+                        <select className="form-input select" id='unidadeMedida' onChange={e=> setUnidadeMedida(e.target.value)} >
+                            <option value='m'>Metros</option>
+                            <option value='pç'>PÇ</option>
+                            <option value='cm'>CM</option>
+                            <option value='mm'>mm</option>
+                        </select>
+                    </div>                     */}
+                    {/* <div className="form-campo">
+                        <label htmlFor="" className="form-label" >Validade</label>
+                        <input type="date" className="form-input" id='validade' onChange={e=> setValidade(e.target.value)} />
+                    </div>                     */}
+                    {/* <div className="form-campo">
+                        <label htmlFor="" className="form-label" >Número de Série</label>
+                        <input type="text" className="form-input" id='validade' onChange={e=> setNumeroSerie(e.target.value)} />
+                    </div>                     */}
+                    <div className="form-campo">
+                        <label htmlFor="" className="form-label" >Lote</label>
+                        <input type="text" className="form-input" id='validade' onChange={e=> setLote(e.target.value)} />
+                    </div>                    
+                    <div className="form-campo">
+                        <label htmlFor="" className="form-label" >Custo</label>
+                        <input type="text" className="form-input" id='validade' onChange={e=> setCusto(e.target.value)} />
+                    </div>                    
+                    <div className="form-campo">
+                        <label htmlFor="" className="form-label" >Fornecedor</label>
+                        <input type="text" className="form-input" id='validade' onChange={e=> setFornecedor(e.target.value)} />
+                    </div>   
+                    {/* <div className="form-campo">
                         <label htmlFor="" className="form-label" >Estoque</label>
                         <select className="form-input select" id='estoque' onChange={e=> setEstoque(e.target.value)}>
                             {
@@ -276,7 +341,7 @@ export default function Vidro() {
                                 ))
                             }
                         </select>
-                    </div>
+                    </div> */}
                     <div className="form-campo">
                         <label htmlFor="" className="form-label" >Imagem</label>
                         <input type="file" className="form-input" id='imagem' onChange={e=> setImagem(e.target.files[0])}/>
@@ -284,6 +349,18 @@ export default function Vidro() {
                     <div className="form-campo">
                         <label htmlFor="" className="form-label" >Preço por m²</label>
                         <input type="text" className="form-input" id='preco' onChange={e=> setPreco(e.target.value)}/>
+                    </div>
+                    <div className="form-campo">
+                        <label htmlFor="" className="form-label" >Ajuste Altura</label>
+                        <input type="text" className="form-input" id='altura' onChange={e=> setAjusteAltura(e.target.value)}/>
+                    </div>
+                    <div className="form-campo">
+                        <label htmlFor="" className="form-label" >Ajuste Comprimento</label>
+                        <input type="text" className="form-input" id='comprimento' onChange={e=> setAjusteComprimento(e.target.value)}/>
+                    </div>
+                    <div className="form-campo">
+                        <label htmlFor="" className="form-label" >Ajuste Largura</label>
+                        <input type="text" className="form-input" id='comprimento' onChange={e=> setAjusteComprimento(e.target.value)}/>
                     </div>
                     <div>
                         <button type="submit" className="btn btn-confirma">Salvar</button>
